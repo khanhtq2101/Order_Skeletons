@@ -1,0 +1,2 @@
+[ Sat Dec  9 08:29:36 2023 ] Load weights from results/ntu/xsub/FR-Head_Joint_90.33/runs.pt.
+[ Sat Dec  9 08:29:51 2023 ] using warm up, epoch: 5

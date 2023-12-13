@@ -1,0 +1,459 @@
+[ Sat Dec  9 08:00:04 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:04:50 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:04:51 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:04:51 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:04:51 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 487, in <module>
+    processor.start()
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 421, in start
+    self.train(epoch, save_model=save_model)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 276, in train
+    for batch_idx, (data, label, index) in enumerate(process):
+  File "/usr/local/lib/python3.10/dist-packages/tqdm/std.py", line 1182, in __iter__
+    for obj in iterable:
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py", line 1328, in _next_data
+    idx, data = self._get_data()
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py", line 1294, in _get_data
+    success, data = self._try_get_data()
+  File "/usr/local/lib/python3.10/dist-packages/torch/utils/data/dataloader.py", line 1132, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "/usr/lib/python3.10/multiprocessing/queues.py", line 122, in get
+    return _ForkingPickler.loads(res)
+  File "/usr/local/lib/python3.10/dist-packages/torch/multiprocessing/reductions.py", line 110, in rebuild_tensor
+    t = torch._utils._rebuild_tensor(storage, storage_offset, size, stride)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_utils.py", line 181, in _rebuild_tensor
+    return t.set_(storage._untyped_storage, storage_offset, size, stride)
+KeyboardInterrupt
+
+[ Sat Dec  9 08:09:39 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:11:08 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:11:08 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:11:08 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:11:08 2023 ] Training epoch: 1
+[ Sat Dec  9 08:36:37 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:36:37 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:36:37 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:36:37 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 489, in <module>
+    parser.set_defaults(**default_arg)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 423, in start
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 289, in train
+    output, cl_loss = self.model(calc_diff_modality(data, **self.train_modality), label, get_cl_loss=True)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 142, in forward
+    x = self.l1(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 183, in forward
+    x1, x2, x3 = self.conv1(x).mean(-2), self.conv2(x).mean(-2), self.conv3(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+
+[ Sat Dec  9 08:47:04 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:47:05 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:47:05 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:47:05 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 496, in <module>
+    processor = Processor(arg)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 430, in start
+    epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 292, in train
+    print("end")
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 142, in forward
+    x = self.l1(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 183, in forward
+    x1, x2, x3 = self.conv1(x).mean(-2), self.conv2(x).mean(-2), self.conv3(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+
+[ Sat Dec  9 08:49:25 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:49:25 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:49:25 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:49:25 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 498, in <module>
+    try:
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 432, in start
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 294, in train
+    print('begin')
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 142, in forward
+    x = self.l1(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 183, in forward
+    x1, x2, x3 = self.conv1(x).mean(-2), self.conv2(x).mean(-2), self.conv3(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+
+[ Sat Dec  9 08:53:09 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:53:09 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:53:09 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:53:09 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 499, in <module>
+    processor = Processor(arg)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 433, in start
+    epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 295, in train
+    else:
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 140, in forward
+    x = x.view(N, M, V, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V)
+KeyboardInterrupt
+
+[ Sat Dec  9 08:54:59 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:54:59 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:54:59 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:54:59 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 501, in <module>
+    processor = Processor(arg)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 435, in start
+    epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 297, in train
+    else:
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 142, in forward
+    x = x.view(N, M, V, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 183, in forward
+    x1, x2, x3 = self.conv1(x).mean(-2), self.conv2(x).mean(-2), self.conv3(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+
+[ Sat Dec  9 08:58:38 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 08:58:38 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 64, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 08:58:38 2023 ] # Parameters: 1462092
+[ Sat Dec  9 08:58:38 2023 ] Training epoch: 1
+[ Sat Dec  9 09:07:45 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:07:46 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 2, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 65, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:07:46 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:07:46 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 503, in <module>
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 437, in start
+    weights = OrderedDict([['module.' + k, v.cuda(self.output_device)] for k, v in weights.items()])
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 314, in train
+    self.train_writer.add_scalar('acc', acc, self.global_step)
+  File "/usr/local/lib/python3.10/dist-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/usr/local/lib/python3.10/dist-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+
+[ Sat Dec  9 09:13:16 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:13:16 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 2, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:13:16 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:13:16 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 492, in <module>
+    processor.start()
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 426, in start
+    self.train(epoch, save_model=save_model)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 291, in train
+    output = self.model(calc_diff_modality(data, **self.train_modality), label)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 142, in forward
+    x = self.l1(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 183, in forward
+    x1, x2, x3 = self.conv1(x).mean(-2), self.conv2(x).mean(-2), self.conv3(x)
+KeyboardInterrupt
+
+[ Sat Dec  9 09:16:36 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:16:37 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 32, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:16:37 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:16:37 2023 ] Training epoch: 1
+[ Sat Dec  9 09:18:34 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:18:35 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 32, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:18:35 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:18:35 2023 ] Training epoch: 1
+[ Sat Dec  9 09:20:40 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:20:40 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 16, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:20:40 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:20:40 2023 ] Training epoch: 1
+[ Sat Dec  9 09:23:07 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:23:08 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 4, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:23:08 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:23:08 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 492, in <module>
+    processor.start()
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 426, in start
+    self.train(epoch, save_model=save_model)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 291, in train
+    output = self.model(calc_diff_modality(data, **self.train_modality), label)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 146, in forward
+    x = self.l4(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 137, in forward
+    out = tempconv(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/container.py", line 215, in forward
+    input = module(input)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/pooling.py", line 166, in forward
+    return F.max_pool2d(input, self.kernel_size, self.stride,
+  File "/usr/local/lib/python3.10/dist-packages/torch/_jit_internal.py", line 488, in fn
+    return if_false(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/functional.py", line 791, in _max_pool2d
+    return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+KeyboardInterrupt
+
+[ Sat Dec  9 09:31:00 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:31:00 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 8, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:31:00 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:31:00 2023 ] Training epoch: 1
+Traceback (most recent call last):
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 492, in <module>
+    processor.start()
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 426, in start
+    self.train(epoch, save_model=save_model)
+  File "/content/drive/MyDrive/Human_Action_Recognition/code/FR-Head/main.py", line 291, in train
+    output = self.model(calc_diff_modality(data, **self.train_modality), label)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/ctrgcn.py", line 144, in forward
+    x = self.l2(x)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 345, in forward
+    y = self.relu(self.tcn1(self.gcn1(x, label=label, mix_top=mix_top)) + self.residual(x))
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 264, in forward
+    z = self.convs[i](x, A[i], self.alpha, label=label, mix_top=mix_top)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/content/drive/.shortcut-targets-by-id/1t7t7_7zdqBl4EZBI1tn0aQJZwDUpEDd0/Human_Action_Recognition/code/FR-Head/model/modules.py", line 185, in forward
+    x1 = self.conv4(x1) * alpha + (A.unsqueeze(0).unsqueeze(0) if A is not None else 0)  # N,C,V,V
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+
+[ Sat Dec  9 09:42:50 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:42:50 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 32, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:42:50 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:42:50 2023 ] Training epoch: 1
+[ Sat Dec  9 09:44:50 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:44:51 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 16, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:44:51 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:44:51 2023 ] Training epoch: 1
+[ Sat Dec  9 09:48:32 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 09:48:32 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 8, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 09:48:32 2023 ] # Parameters: 1462092
+[ Sat Dec  9 09:48:32 2023 ] Training epoch: 1
+[ Sat Dec  9 11:06:28 2023 ] using warm up, epoch: 5
+[ Sat Dec  9 11:06:29 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.ctrgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 8, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sat Dec  9 11:06:29 2023 ] # Parameters: 1462092
+[ Sat Dec  9 11:06:29 2023 ] Training epoch: 1
+[ Sun Dec 10 01:43:51 2023 ] using warm up, epoch: 5
+[ Sun Dec 10 01:43:52 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.stgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 8, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sun Dec 10 01:43:52 2023 ] # Parameters: 2108322
+[ Sun Dec 10 01:43:52 2023 ] Training epoch: 1
+[ Sun Dec 10 01:50:10 2023 ] using warm up, epoch: 5
+[ Sun Dec 10 01:50:10 2023 ] Parameters:
+{'work_dir': 'results/ntu/xsub/demo', 'model_saved_name': 'results/ntu/xsub/demo/runs', 'config': 'config/nturgbd-cross-subject/rand_scale.yaml', 'phase': 'train', 'save_score': False, 'seed': 1, 'log_interval': 100, 'save_interval': 1, 'save_epoch': 30, 'eval_interval': 5, 'print_log': True, 'show_topk': [1, 5], 'feeder': 'feeders.feeder_ntu.Feeder', 'num_worker': 32, 'train_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'train', 'debug': False, 'random_choose': False, 'random_shift': False, 'random_move': False, 'window_size': 64, 'normalization': False, 'random_rot': True, 'random_scale': True, 'p_interval': [0.5, 1], 'vel': False, 'bone': False}, 'test_feeder_args': {'data_path': 'data/ntu/NTU60_CS.npz', 'split': 'test', 'window_size': 64, 'p_interval': [0.95], 'vel': False, 'bone': False, 'debug': False}, 'model': 'model.stgcn.Model', 'model_args': {'num_class': 120, 'num_point': 25, 'num_person': 2, 'graph': 'graph.ntu_rgb_d.Graph', 'graph_args': {'labeling_mode': 'spatial'}}, 'weights': None, 'ignore_weights': [], 'cl_mode': None, 'cl_version': 'V0', 'pred_threshold': 0.0, 'use_p_map': True, 'start_cl_epoch': -1, 'w_cl_loss': 0.1, 'w_multi_cl_loss': [0.1, 0.2, 0.5, 1], 'base_lr': 0.1, 'step': [35, 55], 'device': [0], 'optimizer': 'SGD', 'nesterov': True, 'batch_size': 4, 'test_batch_size': 64, 'start_epoch': 0, 'num_epoch': 2, 'weight_decay': 0.0004, 'lr_decay_rate': 0.1, 'warm_up_epoch': 5}
+
+[ Sun Dec 10 01:50:10 2023 ] # Parameters: 2108322
+[ Sun Dec 10 01:50:10 2023 ] Training epoch: 1
