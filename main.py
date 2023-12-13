@@ -88,11 +88,12 @@ class Processor:
                 arg.model_saved_name = os.path.join(arg.work_dir, 'runs')  # work_dir/runs 模型记录
                 if os.path.isdir(arg.model_saved_name):
                     print('log_dir: ', arg.model_saved_name, 'already exist')
-                    answer = input('delete it? y/n:')
+                    #answer = input('delete it? y/n:')
+                    answer= 'y'
                     if answer == 'y':
                         shutil.rmtree(arg.model_saved_name)
                         print('Dir removed: ', arg.model_saved_name)
-                        input('Refresh the website of tensorboard by pressing any keys')
+                        #input('Refresh the website of tensorboard by pressing any keys')
                     else:
                         print('Dir not removed: ', arg.model_saved_name)
                 self.train_writer = SummaryWriter(os.path.join(arg.model_saved_name, 'train'), 'train')
