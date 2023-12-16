@@ -74,11 +74,10 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     clip2 = torch.tensor(clip2, dtype= torch.float)
     
     #concatenate two clips on channel dimension
-    try:
-        data = torch.cat([clip1, clip2])
-    except:
-        print(clip1.shape)
-        print(clip2.shape)
+    print("c1", clip1.shape)
+    print("c2", clip2.shape)    
+    data = torch.cat([clip1, clip2])
+        
 
     #print("clip shape", clip1.shape)
     #print("Crop output size: ", data.shape)
