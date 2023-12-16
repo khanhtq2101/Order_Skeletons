@@ -58,8 +58,6 @@ def import_class(import_str):
 def calc_diff_modality(data, bone=False, vel=False):
     if data.shape[3] != 25:
         # only work for ntu dataset
-        print(data.shape)
-        print("Done")
         return data
     if bone:
         from feeders.bone_pairs import ntu_pairs
@@ -70,8 +68,6 @@ def calc_diff_modality(data, bone=False, vel=False):
     if vel:
         data[:, :, :-1] = data[:, :, 1:] - data[:, :, :-1]
         data[:, :, -1] = 0
-    print("Done")
-    print(data.shape)
     return data
 
 
@@ -280,11 +276,9 @@ class Processor:
         # train model with real data
         for batch_idx, (data, label, order_label, index) in enumerate(process):
             self.global_step += 1
-            print("label", label.shape)
             B, C, T, V, M= data.shape
             data = data.view(2*B, int(C/2), T, V, M)
             label = torch.flatten(label)
-            print("Reshaped:", data.shape)
 
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
@@ -298,28 +292,30 @@ class Processor:
             else:
                 output = self.model(calc_diff_modality(data, **self.train_modality), label)
 
-            print("Action label:", label.shape)
-            print("Action Output:", output.shape)
-            print("Oder label:", order_label.shape)
-            print("Order output:", order_pred.shape)
+            #print("Action label:", label.shape)
+            #print("Action Output:", output.shape)
+            #print("Oder label:", order_label.shape)
+            #print("Order output:", order_pred.shape)
 
-            print("data type:", order_label.dtype, order_pred.dtype)
-            print("data type:", output.dtype, label.dtype)
+            #print("data type:", order_label.dtype, order_pred.dtype)
+            #print("data type:", output.dtype, label.dtype)
+
             loss_action = self.loss(output, label)
-            loss_order = self.loss(order_pred, order_label)
-            
-            if self.arg.order_mode == 1:
+
+            if self.order_mode:
+              loss_order = self.loss(order_pred, order_label)
               full_loss = loss_action + loss_order
             else: 
               full_loss = loss_action
-            print("Loss done")
+
+            #print("Loss done")
             # backward
             self.optimizer.zero_grad()
-            #full_loss.backward()
-            #self.optimizer.step()
-            print("backward done")
+            full_loss.backward()
+            self.optimizer.step()
+            #print("backward done")
 
-            '''
+            
             loss_value.append(loss.mean().data.item())
             timer['model'] += self.split_time()
 
@@ -350,7 +346,7 @@ class Processor:
             torch.save(weights,
                        self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
 
-        '''
+        
 
     def eval(self, epoch, save_score=False, loader_name=['test'], wrong_file=None, result_file=None):
         if wrong_file is not None:
@@ -441,7 +437,7 @@ class Processor:
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
                 self.train(epoch, save_model=save_model)
-                print("Train done")
+                #print("Train done")
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
