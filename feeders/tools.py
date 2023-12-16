@@ -56,8 +56,8 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     C, T, V, M = data_numpy.shape
     begin = 0
     end = valid_frame_num
-    if valid_frame_num == window:
-        print("AAAAAAAAAAAA end value", end, "window", window)
+    #if valid_frame_num == window:
+    #    print("AAAAAAAAAAAA end value", end, "window", window)
     valid_size = end - begin
     #print("begin", data_numpy.shape)
 

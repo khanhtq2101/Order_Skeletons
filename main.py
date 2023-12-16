@@ -266,7 +266,9 @@ class Processor:
         self.adjust_learning_rate(epoch)
 
         loss_value = []
+        loss_order_value = []
         acc_value = []
+        acc_order_value = []
         self.train_writer.add_scalar('epoch', epoch, self.global_step)
         self.record_time()
         timer = dict(dataloader=0.001, model=0.001, statistics=0.001)
@@ -278,7 +280,6 @@ class Processor:
             self.global_step += 1
             B, C, T, V, M= data.shape
             data = data.view(2*B, int(C/2), T, V, M)
-            print(data.shape, "2 clips per video")
             label = torch.flatten(label)
 
             with torch.no_grad():
@@ -315,30 +316,36 @@ class Processor:
             full_loss.backward()
             self.optimizer.step()
             #print("backward done")
-
             
             loss_value.append(loss_action.mean().data.item())
+            loss_order_value.append(loss_order.mean().data.item())
             timer['model'] += self.split_time()
 
             value, predict_label = torch.max(output.data, 1)
             acc = torch.mean((predict_label == label.data).float())
             acc_value.append(acc.data.item())
-            self.train_writer.add_scalar('acc', acc, self.global_step)
-            self.train_writer.add_scalar('loss', loss_action.mean().data.item(), self.global_step)
+
+            v, predict_order_label = torch.max(order_pred.data, 1)
+            acc_order = torch.mean((predict_order_label == order_label.data).float())
+            acc_order_value.append(acc_order.data.item())
 
             # statistics
             self.lr = self.optimizer.param_groups[0]['lr']
             self.train_writer.add_scalar('lr', self.lr, self.global_step)
             timer['statistics'] += self.split_time()
-
+        
+        self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
+        self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
+        self.train_writer.add_scalar('loss_order', np.mean(loss_order_value), epoch)
+        self.train_writer.add_scalar('acc_order', np.mean(acc_order_value), epoch)
         # statistics of time consumption and loss
         proportion = {
             k: '{:02d}%'.format(int(round(v * 100 / sum(timer.values()))))
             for k, v in timer.items()
         }
         self.print_log(
-            '\tMean training loss: {:.4f}.  Mean training acc: {:.2f}%.'.format(np.mean(loss_value),
-                                                                                np.mean(acc_value) * 100))
+            '\tMean training loss: {:.4f}.  Mean training acc: {:.2f}%. Mean training order loss: {:.4f}.  Mean training  order acc: {:.2f}%.'.format(np.mean(loss_value),
+                                                                                np.mean(acc_value) * 100), np.mean(loss_order_value), np.mean(acc_order_value) * 100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
 
         if save_model:
@@ -441,7 +448,6 @@ class Processor:
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
                 self.train(epoch, save_model=save_model)
-                #print("Train done")
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 
             self.print_log(f'Epoch number: {self.best_acc_epoch}')

@@ -18,7 +18,7 @@ def get_parser():
     # parameter priority: command line > config > default
     parser: ArgumentParser = argparse.ArgumentParser(description='Spatial Temporal Graph Convolution Network')
 
-    # work_dir 是用来储存结果的
+    # work_dir is used to store results
     parser.add_argument('--work-dir', default='./work_dir/temp', help='the work folder for storing results')
     parser.add_argument('-model_saved_name', default='')
     parser.add_argument('--config', default='./config/nturgbd-cross-view/test_bone.yaml',
