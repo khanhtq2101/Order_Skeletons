@@ -21,7 +21,7 @@ test_feeder_args:
   data_path: /kaggle/input/ntu60-skeletons/NTU60_CS.npz
   split: test
   window_size: 32
-  p_interval: [0.5, 1]
+  p_interval: [0.95]
   vel: False
   bone: False
   debug: False

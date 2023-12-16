@@ -69,7 +69,7 @@ ntu120_class_name_short = [
 class Feeder(Dataset):
     def __init__(self, data_path, label_path=None, p_interval=1, split='train', random_choose=False, random_shift=False,
                  random_move=False, random_rot=False, random_scale=False, random_mask=False, window_size=-1, normalization=False, debug=False, use_mmap=False,
-                 bone=False, vel=False):
+                 bone=False, vel=False, order_mode = 0):
         """
         :param data_path:
         :param label_path:
@@ -106,6 +106,8 @@ class Feeder(Dataset):
         self.bone = bone
         self.vel = vel
         self.load_data()
+
+        self.order_mode = order_mode
 
         if normalization:
             self.get_mean_map()
@@ -161,31 +163,33 @@ class Feeder(Dataset):
         
         #data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)        
         #random cropping
-        data_numpy, order_label = tools.valid_crop_random(data_numpy, valid_frame_num, self.p_interval, self.window_size)
-        #augmentation 
-        if self.random_rot:
-            #randomly rotate from (-0.3, 0.3)
-            #matmul skeleton with rotation 
-            data_numpy = torch.cat((tools.random_rot(data_numpy[:3, :, : :]),
-                                    tools.random_rot(data_numpy[3:, :, : :])), dim = 0)    
-        if self.random_scale:
-            #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
-            data_numpy = torch.cat((tools.random_scale(data_numpy[:3, :, : :]),
-                                    tools.random_scale(data_numpy[3:, :, : :])), dim = 0)
-        if self.random_mask:
-            #mask 0.25, randomly erase several frames of data
-            data_numpy = torch.cat((tools.random_mask(data_numpy[:3, :, : :]),
-                                    tools.random_mask(data_numpy[3:, :, : :])), dim = 0)
-
-        # if self.bone:
-        #     from .bone_pairs import ntu_pairs
-        #     bone_data_numpy = np.zeros_like(data_numpy)
-        #     for v1, v2 in ntu_pairs:
-        #         bone_data_numpy[:, :, v1 - 1] = data_numpy[:, :, v1 - 1] - data_numpy[:, :, v2 - 1]
-        #     data_numpy = bone_data_numpy
-        # if self.vel:
-        #     data_numpy[:, :-1] = data_numpy[:, 1:] - data_numpy[:, :-1]
-        #     data_numpy[:, -1] = 0
+        if self.order_mode:
+            data_numpy, order_label = tools.valid_crop_random(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+            if self.random_rot:
+                #randomly rotate from (-0.3, 0.3)
+                #matmul skeleton with rotation 
+                data_numpy = torch.cat((tools.random_rot(data_numpy[:3, :, : :]),
+                                        tools.random_rot(data_numpy[3:, :, : :])), dim = 0)    
+            if self.random_scale:
+                #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
+                data_numpy = torch.cat((tools.random_scale(data_numpy[:3, :, : :]),
+                                        tools.random_scale(data_numpy[3:, :, : :])), dim = 0)
+            if self.random_mask:
+                #mask 0.25, randomly erase several frames of data
+                data_numpy = torch.cat((tools.random_mask(data_numpy[:3, :, : :]),
+                                        tools.random_mask(data_numpy[3:, :, : :])), dim = 0)
+        else:
+            data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+            if self.random_rot:
+                #randomly rotate from (-0.3, 0.3)
+                #matmul skeleton with rotation 
+                data_numpy = tools.random_rot(data_numpy)
+                #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
+                data_numpy = tools.random_scale(data_numpy)
+                #mask 0.25, randomly erase several frames of data
+                data_numpy = tools.random_mask(data_numpy)
+            #augmentation 
+        
         return data_numpy, label, order_label, index
 
     def top_k(self, score, top_k):
