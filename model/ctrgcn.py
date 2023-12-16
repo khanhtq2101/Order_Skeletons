@@ -75,7 +75,7 @@ class Model(nn.Module):
         if self.cl_mode is not None:
             self.build_cl_blocks()
         
-        if self.order_mode:
+        if self.training:
             self.build_order_blocks()
 
         self.fc = nn.Linear(self.base_channel * 4, self.num_class)
@@ -167,7 +167,7 @@ class Model(nn.Module):
         x = x.mean(3).mean(1) # mean on person 
         x = self.drop_out(x)
         
-        if self.training and self.order_mode == 1:
+        if self.training:
             order_pred = self.order_head(feat_fin)
             return self.fc(x), order_pred
         else:

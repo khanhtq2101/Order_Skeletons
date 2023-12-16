@@ -289,10 +289,7 @@ class Processor:
             timer['dataloader'] += self.split_time()
 
             # forward
-            if self.arg.order_mode == 1:
-                output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), label)
-            else:
-                output = self.model(calc_diff_modality(data, **self.train_modality), label)
+            output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), label)
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
