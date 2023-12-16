@@ -121,7 +121,7 @@ class Processor:
         Feeder = import_class(self.arg.feeder)
         self.data_loader = dict()
         if self.arg.phase == 'train':
-            train_dataset = Feeder(**self.arg.train_feeder_args, order_mode = self.arg.order_mode)
+            train_dataset = Feeder(**self.arg.train_feeder_args, order_mode = 1)
 
             self.data_loader['train'] = torch.utils.data.DataLoader(
                 dataset=train_dataset,
@@ -137,7 +137,7 @@ class Processor:
             )
 
         self.data_loader['test'] = torch.utils.data.DataLoader(
-            dataset=Feeder(**self.arg.test_feeder_args, order_mode = self.arg.order_mode),
+            dataset=Feeder(**self.arg.test_feeder_args, order_mode = 0),
             batch_size=self.arg.test_batch_size,
             shuffle=False,
             num_workers=self.arg.num_worker,
