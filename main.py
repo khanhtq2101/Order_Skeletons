@@ -345,7 +345,7 @@ class Processor:
         }
         self.print_log(
             '\tMean training loss: {:.4f}.  Mean training acc: {:.2f}%. Mean training order loss: {:.4f}.  Mean training  order acc: {:.2f}%.'.format(np.mean(loss_value),
-                                                                                np.mean(acc_value) * 100), np.mean(loss_order_value), np.mean(acc_order_value) * 100))
+                                                                                np.mean(acc_value) * 100), np.mean(loss_order_value), np.mean(acc_order_value) * 100)
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
 
         if save_model:
