@@ -295,8 +295,8 @@ class Processor:
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
-            print("Oder label:", order_label.shape)
-            print("Order output:", order_pred.shape)
+            #print("Oder label:", order_label.shape)
+            #print("Order output:", order_pred.shape)
 
             #print("data type:", order_label.dtype, order_pred.dtype)
             #print("data type:", output.dtype, label.dtype)
@@ -438,7 +438,7 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
-                self.train(epoch, save_model=save_model)
+                #self.train(epoch, save_model=save_model)
                 #print("Train done")
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 
