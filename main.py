@@ -305,7 +305,7 @@ class Processor:
 
             if self.arg.order_mode:
               loss_order = self.loss(order_pred, order_label)
-              full_loss = loss_action + loss_order
+              full_loss = loss_action + self.arg.order_weight*loss_order
             else: 
               full_loss = loss_action
 
@@ -440,7 +440,7 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
-                #self.train(epoch, save_model=save_model)
+                self.train(epoch, save_model=save_model)
                 #print("Train done")
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 

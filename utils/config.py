@@ -54,8 +54,6 @@ def get_parser():
                         help='the name of weights which will be ignored in the initialization')
     parser.add_argument('--cl-mode', choices=['ST-Multi-Level'], default=None,
                         help='mode of Contrastive Learning Loss')
-    parser.add_argument('--order-mode', type = int, default=0,
-                        help='Training with order task')
     parser.add_argument('--cl-version', choices=['V0', 'V1', 'V2', "NO FN", "NO FP", "NO FN & FP"], default='V0',
                         help='different way to calculate the cl loss')
     parser.add_argument('--pred_threshold', type=float, default=0.0, help='threshold to define the confident sample')
@@ -65,7 +63,13 @@ def get_parser():
     parser.add_argument('--w-cl-loss', type=float, default=0.1, help='weight of cl loss')
     parser.add_argument('--w-multi-cl-loss', type=float, default=[0.1, 0.2, 0.5, 1], nargs='+',
                         help='weight of multi-level cl loss')
-
+    
+    #order task
+    parser.add_argument('--order-mode', type = int, default=0,
+                        help='Training with order task')
+    parser.add_argument('--order-weight', type = float, default=0.5,
+                        help='Weight for order task')
+    
     # optim
     parser.add_argument('--base-lr', type=float, default=1e-3, help='initial learning rate')
     parser.add_argument('--step', type=int, default=[20, 40, 60], nargs='+',
