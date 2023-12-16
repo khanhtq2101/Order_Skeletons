@@ -199,25 +199,25 @@ class ST_RenovateNet(nn.Module):
     def forward(self, raw_feat, lbl, logit, **kwargs):
         # raw_feat: [N * M, C, T, V]
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        print("Raw feature shape", raw_feat.shape)
+        #print("Raw feature shape", raw_feat.shape)
         
         spatio_feat = raw_feat.mean(1).mean(-2, keepdim=True) #person and temporal dim mean
-        print("Spatial shape", spatio_feat.shape)
+        #print("Spatial shape", spatio_feat.shape)
         spatio_feat = self.spatio_squeeze(spatio_feat)
-        print("Spatial shape", spatio_feat.shape)
+        #print("Spatial shape", spatio_feat.shape)
         spatio_feat = spatio_feat.flatten(1)
-        print("Spatial shape", spatio_feat.shape)
+        #print("Spatial shape", spatio_feat.shape)
         #calculate cl loss
         
         #spatio_cl_loss = self.spatio_cl_net(spatio_feat, lbl, logit, **kwargs)
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) 
         tempor_feat = self.tempor_squeeze(tempor_feat)
-        print("tem shape", tempor_feat.shape)
+        #print("tem shape", tempor_feat.shape)
         tempor_feat = tempor_feat.flatten(1)
-        print("tem shape", tempor_feat.shape)
+        #print("tem shape", tempor_feat.shape)
         tempor_feat = tempor_feat.view(-1, 2, 256)
-        print("tem shape", tempor_feat[:, 0, :].shape)
+        #print("tem shape", tempor_feat[:, 0, :].shape)
         #calculate cl loss
         tempor_cl_loss = self.tempor_cl_net(tempor_feat, lbl, logit, **kwargs)
 
@@ -230,14 +230,15 @@ class Order_Head(nn.Module):
         self.n_frame = n_frame
         self.n_joint = n_joint
         self.n_person = n_person
+        self.h_channel = h_channel
 
         self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1),
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
 
-        self.order_U = nn.Sequential(nn.Conv2d(64, 256, kernel_size=1),
+        self.order_U = nn.Sequential(nn.Conv2d(h_channel // n_frame, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
-        self.order_v = nn.Sequential(nn.Conv2d(64, 256, kernel_size=1),
+        self.order_v = nn.Sequential(nn.Conv2d(h_channel // n_frame, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)
@@ -250,7 +251,7 @@ class Order_Head(nn.Module):
         tempor_feat = self.tempor_squeeze(tempor_feat) 
         print(tempor_feat.shape, "tempor shape")
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
-        tempor_feat = tempor_feat.view(-1, 2, 64) #shape N, 2, 256
+        tempor_feat = tempor_feat.view(-1, 2, self.h_channel // self.n_frame) #shape N, 2, 256
 
         clip1 = tempor_feat[:, 0, :, None, None]
         print("clip1 shape", clip1.shape)

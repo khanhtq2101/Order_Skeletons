@@ -35,8 +35,8 @@ def valid_crop_resize(data_numpy, valid_frame_num, p_interval, window):
         
         bias = np.random.randint(0, valid_size - cropped_length + 1)    # random again
         data = data_numpy[:, begin + bias:begin + bias + cropped_length, :, :]
-        if data.shape[1] == 0:
-            print(cropped_length, bias, valid_size)
+        #if data.shape[1] == 0:
+            #print(cropped_length, bias, valid_size)
 
     # resize, inerpolate to window size
     data = torch.tensor(data, dtype=torch.float)
@@ -56,9 +56,9 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     C, T, V, M = data_numpy.shape
     begin = 0
     end = valid_frame_num
-    print("end value", end)
+    #print("end value", end)
     valid_size = end - begin
-    print("begin", data_numpy.shape)
+    #print("begin", data_numpy.shape)
 
     start_frame = np.random.choice(valid_size, size = 2, replace = False)
     start_frame.sort()
@@ -66,7 +66,7 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     if order_label == 1:
       start_frame = np.flip(start_frame)
 
-    print("Start framse:", start_frame, "order label", order_label)
+    #print("Start framse:", start_frame, "order label", order_label)
 
     clip1 = data_numpy[:, start_frame[0]  :window + start_frame[0], :, :]
     clip1 = torch.tensor(clip1, dtype= torch.float)
@@ -76,8 +76,8 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     #concatenate two clips on channel dimension
     data = torch.cat([clip1, clip2])
 
-    print("clip shape", clip1.shape)
-    print("Crop output size: ", data.shape)
+    #print("clip shape", clip1.shape)
+    #print("Crop output size: ", data.shape)
 
     return data.numpy(), order_label #shape (2*3, window, 25, 2)
 

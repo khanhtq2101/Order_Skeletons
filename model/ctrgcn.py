@@ -52,7 +52,6 @@ class Model(nn.Module):
         self.num_class = num_class
         self.num_point = num_point
         self.num_frame = num_frame
-        print("Num framme", num_frame)
         self.num_person = num_person
         if graph is None:
             raise ValueError()
@@ -164,14 +163,11 @@ class Model(nn.Module):
         # N*M,C,T*V
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
-        print("ffff shape:", x.shape)
         x = x.mean(3).mean(1) # mean on person 
-        print("fc shape", x.shape)
         x = self.drop_out(x)
 
         if self.order_mode:
             order_pred = self.order_head(feat_fin)
-            print(order_pred.shape, "Order shape from model")
             return self.fc(x), order_pred
         else:
             return self.fc(x)
