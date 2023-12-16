@@ -14,7 +14,7 @@ def valid_crop_resize(data_numpy, valid_frame_num, p_interval, window):
     # input: C,T,V,M
     C, T, V, M = data_numpy.shape
     begin = 0
-    end = valid_frame_num
+    end = valid_frame_num 
     valid_size = end - begin
     # crop
     if len(p_interval) == 1:      
@@ -55,12 +55,12 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     # input: C,T,V,M
     C, T, V, M = data_numpy.shape
     begin = 0
-    end = valid_frame_num
+    end = valid_frame_num + 1
     #print("end value", end)
     valid_size = end - begin
     #print("begin", data_numpy.shape)
 
-    start_frame = np.random.choice(valid_size, size = 2, replace = False)
+    start_frame = np.random.choice(end - window, size = 2, replace = False)
     start_frame.sort()
     order_label = np.random.randint(2)
     if order_label == 1:
