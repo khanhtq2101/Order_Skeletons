@@ -278,6 +278,7 @@ class Processor:
             self.global_step += 1
             B, C, T, V, M= data.shape
             data = data.view(2*B, int(C/2), T, V, M)
+            print(data.shape, "2 clips per video")
             label = torch.flatten(label)
 
             with torch.no_grad():

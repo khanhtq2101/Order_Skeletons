@@ -235,10 +235,10 @@ class Order_Head(nn.Module):
         self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1),
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
 
-        self.order_U = nn.Sequential(nn.Conv2d(h_channel // n_frame, 256, kernel_size=1),
+        self.order_U = nn.Sequential(nn.Conv2d(128, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
-        self.order_v = nn.Sequential(nn.Conv2d(h_channel // n_frame, 256, kernel_size=1),
+        self.order_v = nn.Sequential(nn.Conv2d(128, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)
@@ -248,11 +248,14 @@ class Order_Head(nn.Module):
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial pooling
-        tempor_feat = self.tempor_squeeze(tempor_feat) 
+        tempor_feat = self.tempor_squeeze(tempor_feat)
+
+        #how to calculate the hidden dimension 
         print(tempor_feat.shape, "tempor shape")
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
         print("After flatten:", tempor_feat.shape)
-        tempor_feat = tempor_feat.view(-1, 2, self.h_channel // self.n_frame) #shape N, 2, 256
+        c = tempor_feat.shape[-1] // 2
+        tempor_feat = tempor_feat.view(-1, 2, c) #shape N, 2, 256
         print("After flatten 1:", tempor_feat.shape)
         
         clip1 = tempor_feat[:, 0, :, None, None]
