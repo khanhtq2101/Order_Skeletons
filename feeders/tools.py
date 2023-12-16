@@ -60,11 +60,11 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
         print("AAAAAAAAAAAA end value", end, "window", window)
     valid_size = end - begin
     #print("begin", data_numpy.shape)
-    
+
     if valid_frame_num == window:
-        start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
-    else:
         start_frame = np.random.choice(end - window + 1, size = 2, replace = True)
+    else:
+        start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
     start_frame.sort()
     order_label = np.random.randint(2)
     if order_label == 1:
