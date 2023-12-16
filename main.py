@@ -300,9 +300,9 @@ class Processor:
             #print("data type:", output.dtype, label.dtype)
 
             loss_action = self.loss(output, label)
-
+            loss_order = self.loss(order_pred, order_label)
+            
             if self.arg.order_mode:
-              loss_order = self.loss(order_pred, order_label)
               full_loss = loss_action + self.arg.order_weight*loss_order
             else: 
               full_loss = loss_action
