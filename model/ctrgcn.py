@@ -167,7 +167,6 @@ class Model(nn.Module):
         x = x.mean(3).mean(1) # mean on person 
         x = self.drop_out(x)
         
-        print("Mode", self.training)
         if self.training:
             order_pred = self.order_head(feat_fin)
             return self.fc(x), order_pred

@@ -371,7 +371,6 @@ class Processor:
                     label = label.long().cuda(self.output_device)
                     output = self.model(calc_diff_modality(data, **self.test_modality))
                     
-                    print("Shape", output.shape, label.shape)
                     loss = self.loss(output, label)
                     
                     score_frag.append(output.data.cpu().numpy())
