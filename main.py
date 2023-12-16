@@ -88,8 +88,7 @@ class Processor:
                 arg.model_saved_name = os.path.join(arg.work_dir, 'runs')  # work_dir/runs 模型记录
                 if os.path.isdir(arg.model_saved_name):
                     print('log_dir: ', arg.model_saved_name, 'already exist')
-                    #answer = input('delete it? y/n:')
-                    answer= 'y'
+                    answer = 'y' #('delete it? y/n:')
                     if answer == 'y':
                         shutil.rmtree(arg.model_saved_name)
                         print('Dir removed: ', arg.model_saved_name)
@@ -160,8 +159,10 @@ class Processor:
         shutil.copy2(inspect.getfile(Model), self.arg.work_dir)
         print(Model)
         self.model = Model(**self.arg.model_args, cl_mode=self.arg.cl_mode,
+                          order_mode=self.arg.order_mode,
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
+        #print(self.model)
         self.loss = build_loss(self.arg).cuda(output_device)
 
         if self.arg.weights:
@@ -277,34 +278,48 @@ class Processor:
         roll_back_step = self.global_step
 
         # train model with real data
-        for batch_idx, (data, label, index) in enumerate(process):
+        for batch_idx, (data, label, order_label, index) in enumerate(process):
             self.global_step += 1
+            print("label", label.shape)
+            B, C, T, V, M= data.shape
+            data = data.view(2*B, int(C/2), T, V, M)
+            label = torch.flatten(label)
+            print("Reshaped:", data.shape)
+
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
                 label = label.long().cuda(self.output_device)
+                order_label = order_label.long().cuda(self.output_device)
             timer['dataloader'] += self.split_time()
 
             # forward
-            if self.arg.cl_mode is not None:
-                output, cl_loss = self.model(calc_diff_modality(data, **self.train_modality), label, get_cl_loss=True)
+            if self.arg.order_mode == 1:
+                output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), label)
             else:
                 output = self.model(calc_diff_modality(data, **self.train_modality), label)
 
-            loss = self.loss(output, label)
-            full_loss = loss.mean()
+            print("Action label:", label.shape)
+            print("Action Output:", output.shape)
+            print("Oder label:", order_label.shape)
+            print("Order output:", order_pred.shape)
 
-            if self.arg.cl_mode is not None:
-                # cl_loss = self.loss(fn_output, label).mean() + self.loss(fp_output, label).mean()
-                self.train_writer.add_scalar('cl_loss', cl_loss.mean().data.item(), self.global_step)
-                if epoch > self.arg.start_cl_epoch:
-                    full_loss += self.arg.w_cl_loss * cl_loss.mean()
-
+            print("data type:", order_label.dtype, order_pred.dtype)
+            print("data type:", output.dtype, label.dtype)
+            loss_action = self.loss(output, label)
+            loss_order = self.loss(order_pred, order_label)
+            
+            if self.arg.order_mode == 1:
+              full_loss = loss_action + loss_order
+            else: 
+              full_loss = loss_action
+            print("Loss done")
             # backward
             self.optimizer.zero_grad()
-            full_loss.backward()
-            self.optimizer.step()
+            #full_loss.backward()
+            #self.optimizer.step()
+            print("backward done")
 
-
+            '''
             loss_value.append(loss.mean().data.item())
             timer['model'] += self.split_time()
 
@@ -334,6 +349,8 @@ class Processor:
             weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
             torch.save(weights,
                        self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+
+        '''
 
     def eval(self, epoch, save_score=False, loader_name=['test'], wrong_file=None, result_file=None):
         if wrong_file is not None:
@@ -424,7 +441,7 @@ class Processor:
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
                 self.train(epoch, save_model=save_model)
-
+                print("Train done")
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
