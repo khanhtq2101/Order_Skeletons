@@ -251,8 +251,10 @@ class Order_Head(nn.Module):
         tempor_feat = self.tempor_squeeze(tempor_feat) 
         print(tempor_feat.shape, "tempor shape")
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
+        print("After flatten:", tempor_feat.shape)
         tempor_feat = tempor_feat.view(-1, 2, self.h_channel // self.n_frame) #shape N, 2, 256
-
+        print("After flatten 1:", tempor_feat.shape)
+        
         clip1 = tempor_feat[:, 0, :, None, None]
         print("clip1 shape", clip1.shape)
         clip1 = self.order_U(clip1)
