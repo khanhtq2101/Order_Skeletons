@@ -294,8 +294,8 @@ class Processor:
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
-            #print("Oder label:", order_label.shape)
-            #print("Order output:", order_pred.shape)
+            print("Oder label:", order_label.shape)
+            print("Order output:", order_pred.shape)
 
             #print("data type:", order_label.dtype, order_pred.dtype)
             #print("data type:", output.dtype, label.dtype)
