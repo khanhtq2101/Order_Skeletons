@@ -317,14 +317,14 @@ class Processor:
             #print("backward done")
 
             
-            loss_value.append(loss.mean().data.item())
+            loss_value.append(loss_action.mean().data.item())
             timer['model'] += self.split_time()
 
             value, predict_label = torch.max(output.data, 1)
             acc = torch.mean((predict_label == label.data).float())
             acc_value.append(acc.data.item())
             self.train_writer.add_scalar('acc', acc, self.global_step)
-            self.train_writer.add_scalar('loss', loss.mean().data.item(), self.global_step)
+            self.train_writer.add_scalar('loss', loss_action.mean().data.item(), self.global_step)
 
             # statistics
             self.lr = self.optimizer.param_groups[0]['lr']
