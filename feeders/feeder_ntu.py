@@ -155,7 +155,6 @@ class Feeder(Dataset):
         data_numpy = self.data[index]
 
         label = self.label[index]
-        label = torch.tensor([label, label])
         data_numpy = np.array(data_numpy)
 
         valid_frame_num = np.sum(data_numpy.sum(0).sum(-1).sum(-1) != 0)
@@ -164,6 +163,7 @@ class Feeder(Dataset):
         #data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)        
         #random cropping
         if self.order_mode:
+            label = torch.tensor([label, label])
             data_numpy, order_label = tools.valid_crop_random(data_numpy, valid_frame_num, self.p_interval, self.window_size)
             if self.random_rot:
                 #randomly rotate from (-0.3, 0.3)
