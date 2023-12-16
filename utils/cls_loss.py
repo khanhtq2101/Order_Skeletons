@@ -182,7 +182,7 @@ def build_loss(arg):
     #     return nn.CrossEntropyLoss(reduction='none')
     # if arg.loss_type == 'Focal':
     #     return FocalLoss()
-    return nn.CrossEntropyLoss(reduction='none')
+    return nn.CrossEntropyLoss()
 
 
 if __name__ == '__main__':

@@ -54,6 +54,8 @@ def get_parser():
                         help='the name of weights which will be ignored in the initialization')
     parser.add_argument('--cl-mode', choices=['ST-Multi-Level'], default=None,
                         help='mode of Contrastive Learning Loss')
+    parser.add_argument('--order-mode', type = int, default=0,
+                        help='Training with order task')
     parser.add_argument('--cl-version', choices=['V0', 'V1', 'V2', "NO FN", "NO FP", "NO FN & FP"], default='V0',
                         help='different way to calculate the cl loss')
     parser.add_argument('--pred_threshold', type=float, default=0.0, help='threshold to define the confident sample')

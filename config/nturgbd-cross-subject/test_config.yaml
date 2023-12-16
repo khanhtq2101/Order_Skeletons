@@ -9,7 +9,7 @@ train_feeder_args:
   random_choose: False
   random_shift: False
   random_move: False
-  window_size: 32
+  window_size: 16
   normalization: False
   random_rot: True
   random_scale: True
@@ -20,8 +20,8 @@ train_feeder_args:
 test_feeder_args:
   data_path: data/ntu/NTU60_CS.npz
   split: test
-  window_size: 32
-  p_interval: [0.95]
+  window_size: 16
+  p_interval: [0.5, 1]
   vel: False
   bone: False
   debug: False

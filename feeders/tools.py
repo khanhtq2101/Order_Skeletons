@@ -16,32 +16,70 @@ def valid_crop_resize(data_numpy, valid_frame_num, p_interval, window):
     begin = 0
     end = valid_frame_num
     valid_size = end - begin
-
     # crop
-    if len(p_interval) == 1:      # p_interval 只有1个数的情况，从中间固定取 百分之p_interval
+    if len(p_interval) == 1:      
+        #When p_interval has only 1 number, 
+        #it is fixed to take percent of p_interval from the middle.
         p = p_interval[0]
         bias = int((1 - p) * valid_size / 2)
         data = data_numpy[:, begin + bias:end - bias, :, :]  # center_crop
         cropped_length = data.shape[1]
-    else:                         # p_interval 有两个数的情况，代表 从 p[0]~p[1]范围内随机 选一个数
+    else:                         
+        # p_interval When there are two numbers, 
+        #it means randomly selecting a number from the range of p[0]~p[1]
         p = np.random.rand(1) * (p_interval[1] - p_interval[0]) + p_interval[0]
+        
         cropped_length = np.minimum(np.maximum(int(np.floor(valid_size * p)), 64),
-                                    valid_size)  # constraint cropped_length lower bound as 64
-        bias = np.random.randint(0, valid_size - cropped_length + 1)    # 又随机了一次
+                                    valid_size)  
+        # constraint cropped_length lower bound as 64
+        
+        bias = np.random.randint(0, valid_size - cropped_length + 1)    # random again
         data = data_numpy[:, begin + bias:begin + bias + cropped_length, :, :]
         if data.shape[1] == 0:
             print(cropped_length, bias, valid_size)
 
-    # resize, 插值到window size
+    # resize, inerpolate to window size
     data = torch.tensor(data, dtype=torch.float)
     data = data.permute(0, 2, 3, 1).contiguous().view(C * V * M, cropped_length)
     data = data[None, None, :, :]
+
     data = F.interpolate(data, size=(C * V * M, window), mode='bilinear',
-                         align_corners=False).squeeze()  # could perform both up sample and down sample
+                         align_corners=False).squeeze()  
+    # could perform both up sample and down sample
+    # sample up and down
     data = data.contiguous().view(C, V, M, window).permute(0, 3, 1, 2).contiguous().numpy()
 
-    return data
+    return data #(3, 64, 25, 2)
 
+def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
+    # input: C,T,V,M
+    C, T, V, M = data_numpy.shape
+    begin = 0
+    end = valid_frame_num
+    print("end value", end)
+    valid_size = end - begin
+    print("begin", data_numpy.shape)
+
+    start_frame = np.random.choice(valid_size, size = 2, replace = False)
+    start_frame.sort()
+    order_label = np.random.randint(2)
+    if order_label == 1:
+      start_frame = np.flip(start_frame)
+
+    print("Start framse:", start_frame, "order label", order_label)
+
+    clip1 = data_numpy[:, start_frame[0]  :window + start_frame[0], :, :]
+    clip1 = torch.tensor(clip1, dtype= torch.float)
+    clip2 = data_numpy[:, start_frame[1]  :window + start_frame[1], :, :]
+    clip2 = torch.tensor(clip2, dtype= torch.float)
+    
+    #concatenate two clips on channel dimension
+    data = torch.cat([clip1, clip2])
+
+    print("clip shape", clip1.shape)
+    print("Crop output size: ", data.shape)
+
+    return data.numpy(), order_label #shape (2*3, window, 25, 2)
 
 def downsample(data_numpy, step, random_sample=True):
     # input: C,T,V,M
@@ -185,7 +223,7 @@ def _rot(rot):
 
 def random_rot(data_numpy, theta=0.3):
     """     随机旋转人体骨架整体
-    theta: 弧度制
+    theta: 弧度制 radiant get random rotation from randam distribution
     data_numpy: C,T,V,M
     """
     data_torch = torch.from_numpy(data_numpy)

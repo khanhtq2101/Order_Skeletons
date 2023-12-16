@@ -3,7 +3,7 @@ import math
 import numpy as np
 from torch.autograd import Variable
 from model.modules import *
-from model.lib import ST_RenovateNet
+from model.lib import ST_RenovateNet, Order_Head
 
 
 def import_class(name):
@@ -28,6 +28,9 @@ class Model(nn.Module):
         self.l9 = TCN_GCN_unit(self.base_channel * 4, self.base_channel * 4, A, adaptive=self.adaptive)
         self.l10 = TCN_GCN_unit(self.base_channel * 4, self.base_channel * 4, A, adaptive=self.adaptive)
 
+    def build_order_blocks(self):
+        self.order_head = Order_Head(self.base_channel * 4, self.num_frame // 4, self.num_point, self.num_person, n_class=self.num_class, version=self.cl_version, pred_threshold=self.pred_threshold, use_p_map=self.use_p_map)
+        
     def build_cl_blocks(self):
         if self.cl_mode == "ST-Multi-Level":
             self.ren_low = ST_RenovateNet(self.base_channel, self.num_frame, self.num_point, self.num_person, n_class=self.num_class, version=self.cl_version, pred_threshold=self.pred_threshold, use_p_map=self.use_p_map)
@@ -42,13 +45,14 @@ class Model(nn.Module):
                  num_class=60, num_point=25, num_frame=64, num_person=2, graph=None, graph_args=dict(), in_channels=3,
                  base_channel=64, drop_out=0, adaptive=True,
                  # Module Params
-                 cl_mode=None, multi_cl_weights=[1, 1, 1, 1], cl_version='V0', pred_threshold=0, use_p_map=True,
+                 cl_mode=None, order_mode = 0, multi_cl_weights=[1, 1, 1, 1], cl_version='V0', pred_threshold=0, use_p_map=True,
                  ):
         super(Model, self).__init__()
 
         self.num_class = num_class
         self.num_point = num_point
         self.num_frame = num_frame
+        print("Num framme", num_frame)
         self.num_person = num_person
         if graph is None:
             raise ValueError()
@@ -60,16 +64,20 @@ class Model(nn.Module):
         self.drop_out = nn.Dropout(drop_out) if drop_out else lambda x: x
         self.adaptive = adaptive
         self.cl_mode = cl_mode
+        self.order_mode = order_mode
         self.multi_cl_weights = multi_cl_weights
         self.cl_version = cl_version
         self.pred_threshold = pred_threshold
         self.use_p_map = use_p_map
-
+        
         self.data_bn = nn.BatchNorm1d(num_person * in_channels * num_point)
         self.build_basic_blocks()
 
         if self.cl_mode is not None:
             self.build_cl_blocks()
+        
+        if self.order_mode:
+            self.build_order_blocks()
 
         self.fc = nn.Linear(self.base_channel * 4, self.num_class)
         nn.init.normal_(self.fc.weight, 0, math.sqrt(2. / num_class))
@@ -126,10 +134,6 @@ class Model(nn.Module):
         return logits, cl_loss
 
     def forward(self, x, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
-                
-        if get_hidden_feat:
-            return self.get_hidden_feat(x)
-
         if len(x.shape) == 3:
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
@@ -147,7 +151,6 @@ class Model(nn.Module):
         x = self.l5(x)
         feat_mid = x.clone()
 
-
         x = self.l6(x)
         x = self.l7(x)
         x = self.l8(x)
@@ -155,16 +158,20 @@ class Model(nn.Module):
 
         x = self.l9(x)
         x = self.l10(x)
-        feat_fin = x.clone()
+        feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
 
         # N*M,C,T*V
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
-        x = x.mean(3).mean(1)
+        print("ffff shape:", x.shape)
+        x = x.mean(3).mean(1) # mean on person 
+        print("fc shape", x.shape)
         x = self.drop_out(x)
 
-        if get_cl_loss and self.cl_mode == "ST-Multi-Level":
-            return self.get_ST_Multi_Level_cl_output(x, feat_low, feat_mid, feat_high, feat_fin, label)
-
-        return self.fc(x)
+        if self.order_mode:
+            order_pred = self.order_head(feat_fin)
+            print(order_pred.shape, "Order shape from model")
+            return self.fc(x), order_pred
+        else:
+            return self.fc(x)

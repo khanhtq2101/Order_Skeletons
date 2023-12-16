@@ -1,6 +1,7 @@
 import numpy as np
 
 from torch.utils.data import Dataset
+import torch
 
 from feeders import tools
 
@@ -137,19 +138,45 @@ class Feeder(Dataset):
     def __iter__(self):
         return self
 
+    def get_valid_frames(self):
+        lenght = np.zeros((301,), dtype= int)
+
+        for i in range(len(self.data)):
+          data_numpy = self.data[i]
+          data_numpy = np.array(data_numpy)
+          valid_frame_num = np.sum(data_numpy.sum(0).sum(-1).sum(-1) != 0)
+          lenght[valid_frame_num] += 1
+        
+        return lenght
+
     def __getitem__(self, index):
         data_numpy = self.data[index]
+
         label = self.label[index]
+        label = torch.tensor([label, label])
         data_numpy = np.array(data_numpy)
+
         valid_frame_num = np.sum(data_numpy.sum(0).sum(-1).sum(-1) != 0)
         # reshape Tx(MVC) to CTVM
-        data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+        
+        #data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)        
+        #random cropping
+        data_numpy, order_label = tools.valid_crop_random(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+        #augmentation 
         if self.random_rot:
-            data_numpy = tools.random_rot(data_numpy)
+            #randomly rotate from (-0.3, 0.3)
+            #matmul skeleton with rotation 
+            data_numpy = torch.cat((tools.random_rot(data_numpy[:3, :, : :]),
+                                    tools.random_rot(data_numpy[3:, :, : :])), dim = 0)    
         if self.random_scale:
-            data_numpy = tools.random_scale(data_numpy)
+            #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
+            data_numpy = torch.cat((tools.random_scale(data_numpy[:3, :, : :]),
+                                    tools.random_scale(data_numpy[3:, :, : :])), dim = 0)
         if self.random_mask:
-            data_numpy = tools.random_mask(data_numpy)
+            #mask 0.25, randomly erase several frames of data
+            data_numpy = torch.cat((tools.random_mask(data_numpy[:3, :, : :]),
+                                    tools.random_mask(data_numpy[3:, :, : :])), dim = 0)
+
         # if self.bone:
         #     from .bone_pairs import ntu_pairs
         #     bone_data_numpy = np.zeros_like(data_numpy)
@@ -159,8 +186,7 @@ class Feeder(Dataset):
         # if self.vel:
         #     data_numpy[:, :-1] = data_numpy[:, 1:] - data_numpy[:, :-1]
         #     data_numpy[:, -1] = 0
-
-        return data_numpy, label, index
+        return data_numpy, label, order_label, index
 
     def top_k(self, score, top_k):
         rank = score.argsort()
