@@ -302,7 +302,7 @@ class Processor:
 
             loss_action = self.loss(output, label)
 
-            if self.order_mode:
+            if self.arg.order_mode:
               loss_order = self.loss(order_pred, order_label)
               full_loss = loss_action + loss_order
             else: 
