@@ -245,23 +245,23 @@ class Order_Head(nn.Module):
 
     def forward(self, raw_feat, **kwargs):
         # raw_feat: [2N * M, C, T, V]
-        print("raw feature before", raw_feat.shape)
+        #print("raw feature before", raw_feat.shape)
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        print("raw feature", raw_feat.shape)
+        #print("raw feature", raw_feat.shape)
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial pooling
         tempor_feat = self.tempor_squeeze(tempor_feat)
 
         #how to calculate the hidden dimension?
-        print(tempor_feat.shape, "tempor shape")
+        #print(tempor_feat.shape, "tempor shape")
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
-        print("After flatten:", tempor_feat.shape)
+        #print("After flatten:", tempor_feat.shape)
         c = tempor_feat.shape[-1] // 2
         tempor_feat = tempor_feat.view(-1, 2, c) #shape N, 2, 256
-        print("After flatten 1:", tempor_feat.shape)
+        #print("After flatten 1:", tempor_feat.shape)
         
         clip1 = tempor_feat[:, 0, :, None, None]
-        print("clip1 shape", clip1.shape)
+        #print("clip1 shape", clip1.shape)
         clip1 = self.order_U(clip1)
         clip2 = tempor_feat[:, 1, :, None, None]
         clip2 = self.order_v(clip2)
@@ -270,7 +270,7 @@ class Order_Head(nn.Module):
         order_pred = self.order_fc(tempor_feat)
         order_pred = torch.squeeze(order_pred)
 
-        print("Temporal feature shape:", order_pred.shape)
+        #print("Temporal feature shape:", order_pred.shape)
 
         return order_pred
         

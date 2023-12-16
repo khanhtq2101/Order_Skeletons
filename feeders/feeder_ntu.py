@@ -178,6 +178,8 @@ class Feeder(Dataset):
                 #mask 0.25, randomly erase several frames of data
                 data_numpy = torch.cat((tools.random_mask(data_numpy[:3, :, : :]),
                                         tools.random_mask(data_numpy[3:, :, : :])), dim = 0)
+            
+            return data_numpy, label, order_label, index
         else:
             data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)
             if self.random_rot:
@@ -189,8 +191,9 @@ class Feeder(Dataset):
                 #mask 0.25, randomly erase several frames of data
                 data_numpy = tools.random_mask(data_numpy)
             #augmentation 
+            return data_numpy, label, index
         
-        return data_numpy, label, order_label, index
+        
 
     def top_k(self, score, top_k):
         rank = score.argsort()

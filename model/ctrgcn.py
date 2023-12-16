@@ -139,7 +139,7 @@ class Model(nn.Module):
         N, C, T, V, M = x.size()
 
         x = x.permute(0, 4, 3, 1, 2).contiguous().view(N, M * V * C, T)
-        print("Batch norm input", x.shape)
+        #print("Batch norm input", x.shape)
         x = self.data_bn(x)
         x = x.view(N, M, V, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V)
                 
@@ -167,7 +167,7 @@ class Model(nn.Module):
         x = x.mean(3).mean(1) # mean on person 
         x = self.drop_out(x)
 
-        if self.order_mode:
+        if self.training:
             order_pred = self.order_head(feat_fin)
             return self.fc(x), order_pred
         else:
