@@ -455,7 +455,7 @@ class Processor:
             wf = weights_path.replace('.pt', '_wrong.txt')
             rf = weights_path.replace('.pt', '_right.txt')
             self.arg.print_log = False
-            self.eval(epoch=0, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
+            #self.eval(epoch=0, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
             wrong_analyze(wf, rf)
             self.arg.print_log = True
 
@@ -479,7 +479,7 @@ class Processor:
             self.arg.print_log = False
             self.print_log('Model:   {}.'.format(self.arg.model))
             self.print_log('Weights: {}.'.format(self.arg.weights))
-            self.eval(epoch=0, save_score=self.arg.save_score, loader_name=['test'], wrong_file=wf, result_file=rf)
+            #self.eval(epoch=0, save_score=self.arg.save_score, loader_name=['test'], wrong_file=wf, result_file=rf)
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
 

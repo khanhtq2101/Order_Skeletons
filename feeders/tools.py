@@ -78,10 +78,10 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     clip2 = torch.tensor(clip2, dtype= torch.float)
     
     #concatenate two clips on channel dimension
-    print("c1", clip1.shape)
-    print("c2", clip2.shape)
-    print("Valid size", valid_size)
-    print("Start frame:", start_frame)    
+    #print("c1", clip1.shape)
+    #print("c2", clip2.shape)
+    #print("Valid size", valid_size)
+    #print("Start frame:", start_frame)    
     data = torch.cat([clip1, clip2])
         
 
