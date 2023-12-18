@@ -52,7 +52,7 @@ class Model(nn.Module):
         self.num_class = num_class
         self.num_point = num_point
         self.num_frame = num_frame
-        print("Number frame in CTR GCN model:", self.num_frame)
+        #print("Number frame in CTR GCN model:", self.num_frame)
         self.num_person = num_person
         if graph is None:
             raise ValueError()
@@ -176,6 +176,6 @@ class Model(nn.Module):
         
         if self.training:
             order_pred = self.order_head(feat_fin)
-            return self.fc(x), order_pred, feat_fin 
+            return self.fc(x), order_pred
         else:
             return self.fc(x)

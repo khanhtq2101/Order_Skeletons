@@ -290,13 +290,13 @@ class Processor:
             timer['dataloader'] += self.split_time()
 
             # forward
-            output, order_pred, feat_fin = self.model(calc_diff_modality(data, **self.train_modality), label)
+            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), label)
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
             #print("Oder label:", order_label.shape)
             #print("Order output:", order_pred.shape)
-            print("Final feature:", feat_fin.shape)
+            #print("Final feature:", feat_fin.shape)
 
             #print("data type:", order_label.dtype, order_pred.dtype)
             #print("data type:", output.dtype, label.dtype)
