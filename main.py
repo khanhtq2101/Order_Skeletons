@@ -159,6 +159,7 @@ class Processor:
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print(self.model)
+        self.model = nn.DataParallel(self.model, device_ids=[0, 1])
         self.loss = build_loss(self.arg).cuda(output_device)
 
         if self.arg.weights:
