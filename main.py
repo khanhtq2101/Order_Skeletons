@@ -155,7 +155,7 @@ class Processor:
         shutil.copy2(inspect.getfile(Model), self.arg.work_dir)
         print(Model)
         self.model = Model(**self.arg.model_args, cl_mode=self.arg.cl_mode,
-                          order_mode=self.arg.order_mode,
+                           order_mode=self.arg.order_mode,
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print(self.model)
