@@ -226,13 +226,15 @@ class ST_RenovateNet(nn.Module):
 class Order_Head(nn.Module):
     def __init__(self, n_channel, n_frame, n_joint, n_person, h_channel=256, **kwargs):
         super(Order_Head, self).__init__()
-        self.n_channel = n_channel
-        self.n_frame = n_frame
+        self.n_channel = n_channel # = base_channel * 4 = 64 * 4
+        self.n_frame = n_frame # = num_frame // 4 = 32 // 8= 4
         self.n_joint = n_joint
         self.n_person = n_person
         self.h_channel = h_channel
 
-        self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1),
+        print("N frame in Order head:", n_frame, h_channel // n_frame)
+
+        self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1), # 256 --> 64
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
 
         self.order_U = nn.Sequential(nn.Conv2d(128, 256, kernel_size=1),
@@ -249,14 +251,12 @@ class Order_Head(nn.Module):
 
         print("raw feature before", raw_feat.shape)
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        #after reshape: [2N, 2, C, T, V]
-        print("raw feature", raw_feat.shape)
+        print("raw feature", raw_feat.shape) #after reshape: [2N, 2, C, T, V] = [128, 2, 256, 8, 25]
 
-        tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling
-        # [2N, C, T]
-        print("After person and spatial mean:", tempor_feat.shape)
+        tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling 
+        print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, V] = [128, 256, 8, 1]
         tempor_feat = self.tempor_squeeze(tempor_feat)
-        print("After temporal squeeze:", tempor_feat.shape) # [128, 32, 8, 1]
+        print("After temporal squeeze:", tempor_feat.shape) # [2N, C, T, V] [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
         print("After flatten:", tempor_feat.shape)
