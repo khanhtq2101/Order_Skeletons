@@ -169,6 +169,6 @@ class Model(nn.Module):
         
         if self.training:
             order_pred = self.order_head(feat_fin)
-            return self.fc(x), order_pred
+            return self.fc(x), order_pred, feat_fin 
         else:
             return self.fc(x)
