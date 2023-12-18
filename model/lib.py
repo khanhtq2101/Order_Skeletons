@@ -254,8 +254,9 @@ class Order_Head(nn.Module):
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling
         # [2N, C, T]
+        print("After person and spatial mean:", tempor_feat.shape)
         tempor_feat = self.tempor_squeeze(tempor_feat)
-        print("After temporal squeeze:", tempor_feat.shape)
+        print("After temporal squeeze:", tempor_feat.shape) # [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
         print("After flatten:", tempor_feat.shape)
