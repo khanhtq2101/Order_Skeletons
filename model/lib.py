@@ -245,17 +245,21 @@ class Order_Head(nn.Module):
 
     def forward(self, raw_feat, **kwargs):
         # raw_feat: [2N * M, C, T, V]
+        # with batch 64: [256, C, T, V]
+
         print("raw feature before", raw_feat.shape)
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
+        #after reshape: [2N, 2, C, T, V]
         print("raw feature", raw_feat.shape)
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling
+        # [2N, C, T]
         tempor_feat = self.tempor_squeeze(tempor_feat)
+        print("After temporal squeeze:", tempor_feat.shape)
 
-        #how to calculate the hidden dimension?
-        #print(tempor_feat.shape, "tempor shape")
         tempor_feat = tempor_feat.flatten(1) #  2N, 256
-        #print("After flatten:", tempor_feat.shape)
+        print("After flatten:", tempor_feat.shape)
+
         c = tempor_feat.shape[-1] // 2
         tempor_feat = tempor_feat.view(-1, 2, c) #shape N, 2, 256
         #print("After flatten 1:", tempor_feat.shape)

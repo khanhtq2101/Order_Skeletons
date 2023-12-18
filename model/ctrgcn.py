@@ -52,6 +52,7 @@ class Model(nn.Module):
         self.num_class = num_class
         self.num_point = num_point
         self.num_frame = num_frame
+        print("Number frame in CTR GCN model:", self.num_frame)
         self.num_person = num_person
         if graph is None:
             raise ValueError()
@@ -138,11 +139,16 @@ class Model(nn.Module):
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
         N, C, T, V, M = x.size()
 
+        # [N, M, V, C, T]
         x = x.permute(0, 4, 3, 1, 2).contiguous().view(N, M * V * C, T)
         #print("Batch norm input", x.shape)
         x = self.data_bn(x)
+
+        # [N, M, C, T, V]
+        # the oder in the batch dimension (N) must be researved
         x = x.view(N, M, V, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V)
-                
+
+        # [N*M, C, T, V]                
         x = self.l1(x)
         feat_low = x.clone()
         x = self.l2(x)
@@ -165,6 +171,7 @@ class Model(nn.Module):
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
         x = x.mean(3).mean(1) # mean on person 
+        
         x = self.drop_out(x)
         
         if self.training:
