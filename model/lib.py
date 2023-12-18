@@ -237,10 +237,12 @@ class Order_Head(nn.Module):
         self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1), # 256 --> 32
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
 
-        self.order_U = nn.Sequential(nn.Conv2d(128, 256, kernel_size=1),
+        #how to calculate C= 256 with n_frame 32
+        
+        self.order_U = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame), 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
-        self.order_v = nn.Sequential(nn.Conv2d(128, 256, kernel_size=1),
+        self.order_V = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame), 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)
@@ -254,28 +256,28 @@ class Order_Head(nn.Module):
         print("raw feature", raw_feat.shape) #after reshape: [2N, 2, C, T, V] = [128, 2, 256, 8, 25]
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling 
-        print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, V] = [128, 256, 8, 1]
+        print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, 1] = [128, 256, 8, 1]
         tempor_feat = self.tempor_squeeze(tempor_feat)
         print("After temporal squeeze:", tempor_feat.shape) # [2N, C, T, V] = [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  flatten from dim 1 to end, to [2N, C] = [128, 8*32= 256]
-        print("After flatten:", tempor_feat.shape)
+        print("After flatten:", tempor_feat.shape) # [128, 256]
 
-        c = tempor_feat.shape[-1] // 2
+        c = tempor_feat.shape[-1] 
         tempor_feat = tempor_feat.view(-1, 2, c) #from [2N, C] to [N, 2, C]
-        print("before seperate U, V:", tempor_feat.shape)
+        print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
         
-        clip1 = tempor_feat[:, 0, :, None, None]
-        print("clip1 shape", clip1.shape)
+        clip1 = tempor_feat[:, 0, :, None, None] 
+        print("clip1 shape", clip1.shape) # [64, 256, 1, 1]
         clip1 = self.order_U(clip1)
         clip2 = tempor_feat[:, 1, :, None, None]
-        clip2 = self.order_v(clip2)
+        clip2 = self.order_V(clip2)
 
         tempor_feat = torch.cat((clip1, clip2), dim= 1)
         order_pred = self.order_fc(tempor_feat)
         order_pred = torch.squeeze(order_pred)
 
-        #print("Temporal feature shape:", order_pred.shape)
+        print("Temporal prediction shape:", order_pred.shape)
 
         return order_pred
         
