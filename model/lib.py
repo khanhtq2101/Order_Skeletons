@@ -251,24 +251,24 @@ class Order_Head(nn.Module):
         # raw_feat: [2N * M, C, T, V]
         # with batch 64: [256, C, T, V]
 
-        print("raw feature before", raw_feat.shape)
+        #print("raw feature before", raw_feat.shape)
         raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        print("raw feature", raw_feat.shape) #after reshape: [2N, 2, C, T, V] = [128, 2, 256, 8, 25]
+        #print("raw feature", raw_feat.shape) #after reshape: [2N, 2, C, T, V] = [128, 2, 256, 8, 25]
 
         tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling 
-        print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, 1] = [128, 256, 8, 1]
+        #print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, 1] = [128, 256, 8, 1]
         tempor_feat = self.tempor_squeeze(tempor_feat)
-        print("After temporal squeeze:", tempor_feat.shape) # [2N, C, T, 1] = [128, 32, 8, 1]
+        #print("After temporal squeeze:", tempor_feat.shape) # [2N, C, T, 1] = [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  flatten from dim 1 to end, to [2N, C] = [128, 8*32= 256]
-        print("After flatten:", tempor_feat.shape) # [128, 256]
+        #print("After flatten:", tempor_feat.shape) # [128, 256]
 
         c = tempor_feat.shape[-1] 
         tempor_feat = tempor_feat.view(-1, 2, c) #from [2N, C] to [N, 2, C]
-        print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
+        #print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
         
         clip1 = tempor_feat[:, 0, :, None, None] 
-        print("clip1 shape", clip1.shape) # [64, 256, 1, 1]
+        #print("clip1 shape", clip1.shape) # [64, 256, 1, 1]
         clip1 = self.order_U(clip1)
         clip2 = tempor_feat[:, 1, :, None, None]
         clip2 = self.order_V(clip2)
@@ -277,7 +277,7 @@ class Order_Head(nn.Module):
         order_pred = self.order_fc(tempor_feat)
         order_pred = torch.squeeze(order_pred)
 
-        print("Temporal prediction shape:", order_pred.shape)
+        #print("Temporal prediction shape:", order_pred.shape)
 
         return order_pred
         
