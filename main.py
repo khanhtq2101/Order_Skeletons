@@ -350,7 +350,8 @@ class Processor:
                                                                                 np.mean(acc_value) * 100, np.mean(loss_order_value), np.mean(acc_order_value) * 100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
 
-        if save_model:
+        #if save_model:
+        if 1: 
             state_dict = self.model.state_dict()
             weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
             torch.save(weights,
