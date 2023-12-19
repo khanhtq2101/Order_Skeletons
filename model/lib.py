@@ -232,7 +232,7 @@ class Order_Head(nn.Module):
         self.n_person = n_person
         self.h_channel = h_channel
 
-        print("N frame in Order head:", n_frame, h_channel // n_frame)
+        #print("N frame in Order head:", n_frame, h_channel // n_frame)
 
         self.tempor_squeeze = nn.Sequential(nn.Conv2d(n_channel, h_channel // n_frame, kernel_size=1), # 256 --> 32
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
