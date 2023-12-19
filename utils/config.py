@@ -84,5 +84,6 @@ def get_parser():
     parser.add_argument('--weight-decay', type=float, default=0.0005, help='weight decay for optimizer')
     parser.add_argument('--lr-decay-rate', type=float, default=0.1, help='decay rate for learning rate')
     parser.add_argument('--warm_up_epoch', type=int, default=0)
+    parser.add_argument('--optim-state-path', default=None, help='Optimizer initialization')
 
     return parser

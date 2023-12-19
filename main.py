@@ -169,7 +169,7 @@ class Processor:
             except:
                 pass
 
-            self.print_log('Load weights from {}.'.format(self.arg.weights))
+            self.print_log('Load model weights from {}.'.format(self.arg.weights))
             if '.pkl' in self.arg.weights:
                 with open(self.arg.weights, 'r') as f:
                     weights = pickle.load(f)
@@ -213,6 +213,11 @@ class Processor:
                 weight_decay=self.arg.weight_decay)
         else:
             raise ValueError()
+        
+        if self.arg.optim_state_path:
+            print("Loading optimizer from ", self.arg.optim_state_path)
+            optim_state = torch.load(self.arg.optim_state_path)
+            self.optimizer.load_state_dict(optim_state)
 
         self.print_log('using warm up, epoch: {}'.format(self.arg.warm_up_epoch))
 
@@ -350,6 +355,9 @@ class Processor:
             weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
             torch.save(weights,
                        self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+            optim_state_dict = self.optimizer.state_dict()
+            torch.save(optim_state_dict,
+                       self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
 
         
 
@@ -403,8 +411,8 @@ class Processor:
 
             print('Accuracy: ', accuracy, ' model: ', self.arg.model_saved_name)
             if self.arg.phase == 'train':
-                self.val_writer.add_scalar('loss', loss, self.global_step)
-                self.val_writer.add_scalar('acc', accuracy, self.global_step)
+                self.val_writer.add_scalar('loss', loss, epoch)
+                self.val_writer.add_scalar('acc', accuracy, epoch)
 
             score_dict = dict(
                 zip(self.data_loader[ln].dataset.sample_name, score))
@@ -433,6 +441,10 @@ class Processor:
 
     def start(self):
         if self.arg.phase == 'train':
+            if self.arg.optim_state_path:
+                self.arg.start_epoch = int(self.arg.optim_state_path.split('-')[-2]) #minus 1 or not ???
+                print("Start epoch:", self.arg.start_epoch + 1)
+
             self.print_log('Parameters:\n{}\n'.format(str(vars(self.arg))))
             self.global_step = self.arg.start_epoch * len(self.data_loader['train']) / self.arg.batch_size
 
