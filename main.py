@@ -158,6 +158,7 @@ class Processor:
                            order_mode=self.arg.order_mode,
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
+        print("Model keys:", state.keys())
         #print(self.model)
         self.model = nn.DataParallel(self.model)
         self.loss = build_loss(self.arg).cuda(output_device)
