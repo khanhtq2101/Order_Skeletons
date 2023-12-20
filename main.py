@@ -361,7 +361,7 @@ class Processor:
         
         weights= torch.load(self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
         self.model.load_state_dict(weights)
-        print("Model weight name: ", list(weights.keys()))
+        print("Model weight name: ", list(self.model.state_dict().keys()))
         print("Load model successfully")
         
 
