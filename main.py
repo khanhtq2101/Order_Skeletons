@@ -372,7 +372,7 @@ class Processor:
             step = 0
             process = tqdm(self.data_loader[ln], ncols=40)
 
-            for batch_idx, (data, label, index) in enumerate(process):
+            for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
                 with torch.no_grad():
                     data = data.float().cuda(self.output_device)
@@ -451,7 +451,7 @@ class Processor:
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
-
+                save_model = 1
                 self.train(epoch, save_model=save_model)
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
