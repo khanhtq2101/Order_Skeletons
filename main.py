@@ -189,6 +189,8 @@ class Processor:
 
             try:
                 self.model.load_state_dict(weights)
+                print("Load model successfully")
+                print("Weight keys:", weights.keys())
             except:
                 state = self.model.state_dict()
                 #print("Weight keys:", weights.keys())
