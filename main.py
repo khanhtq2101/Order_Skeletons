@@ -160,7 +160,7 @@ class Processor:
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print("Model keys:", self.model.state_dict().keys())
         #print(self.model)
-        self.model = nn.DataParallel(self.model)
+        self.model = nn.DataParallel(self.model, device_ids = [0, 1])
         #print("Model keys:", self.model.state_dict().keys())
         self.loss = build_loss(self.arg).cuda(output_device)
 
