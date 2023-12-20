@@ -294,8 +294,6 @@ class Processor:
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        print("Model on", next(self.model.parameters()).device)
-
     
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
