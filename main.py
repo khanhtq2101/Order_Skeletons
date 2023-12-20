@@ -275,6 +275,10 @@ class Processor:
         loader = self.data_loader['train']
         self.adjust_learning_rate(epoch)
 
+        state = self.model.state_dict()
+        print("Weight keys:", weights.keys())
+        print("Model keys:", state.keys())
+
         loss_value = []
         loss_order_value = []
         acc_value = []
