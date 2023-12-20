@@ -359,6 +359,7 @@ class Processor:
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
             print(optim_state.keys())
             print("AAAAAAAAAAAAAA")
+            self.load_optimizer()
             self.optimizer.load_state_dict(optim_state)
 
         
