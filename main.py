@@ -159,7 +159,7 @@ class Processor:
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print(self.model)
-        self.model = nn.DataParallel(self.model, device_ids=[0])
+        self.model = nn.DataParallel(self.model, device_ids=[0, 1])
         self.loss = build_loss(self.arg).cuda(output_device)
 
         if self.arg.weights:
@@ -175,8 +175,6 @@ class Processor:
                     weights = pickle.load(f)
             else:
                 weights = torch.load(self.arg.weights)
-
-            #weights = OrderedDict([[k.split('module.')[-1], v.cuda(output_device)] for k, v in weights.items()])
 
             keys = list(weights.keys())
             for w in self.arg.ignore_weights:
@@ -281,18 +279,7 @@ class Processor:
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        # train model with real data
-        state_dict = self.model.state_dict()
-        weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
-        torch.save(weights,
-                    self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-        torch.save(self.model.state_dict(),
-                    self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-        torch.save(self.optimizer.state_dict(),
-                    self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-
-        return
-
+        '''
         for batch_idx, (data, label, order_label, index) in enumerate(process):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -347,6 +334,8 @@ class Processor:
             self.train_writer.add_scalar('lr', self.lr, self.global_step)
             timer['statistics'] += self.split_time()
         
+        '''
+
         self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
         self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
         self.train_writer.add_scalar('loss_order', np.mean(loss_order_value), epoch)
@@ -361,12 +350,7 @@ class Processor:
                                                                                 np.mean(acc_value) * 100, np.mean(loss_order_value), np.mean(acc_order_value) * 100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
 
-        #if save_model:
-        if 1: 
-            state_dict = self.model.state_dict()
-            weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
-            torch.save(weights,
-                       self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+        if save_model:
             torch.save(self.model.state_dict(),
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
             torch.save(self.optimizer.state_dict(),
@@ -469,7 +453,7 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
-                self.train(epoch, save_model=save_model)
+                self.train(epoch, save_model=1)
                 #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             '''
