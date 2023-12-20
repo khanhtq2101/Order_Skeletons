@@ -215,7 +215,6 @@ class Processor:
         if self.arg.optim_state_path:
             print("Loading optimizer from ", self.arg.optim_state_path)
             optim_state = torch.load(self.arg.optim_state_path)
-            print(optim_state.keys())
             self.optimizer.load_state_dict(optim_state)
 
         self.print_log('using warm up, epoch: {}'.format(self.arg.warm_up_epoch))
@@ -354,14 +353,8 @@ class Processor:
         if save_model:
             torch.save(self.model.state_dict(),
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-            optim_state = self.optimizer.state_dict()
-            torch.save(optim_state,
+            torch.save(self.optimizer.state_dict(),
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-            print(optim_state.keys())
-            print("AAAAAAAAAAAAAA")
-            self.load_optimizer()
-            self.optimizer.load_state_dict(optim_state)
-
         
 
     def eval(self, epoch, save_score=False, loader_name=['test'], wrong_file=None, result_file=None):
