@@ -223,6 +223,12 @@ class Processor:
             optim_state = torch.load(self.arg.optim_state_path, map_location = torch.device('cuda'))
             self.optimizer.load_state_dict(optim_state)
 
+            optim_state = self.optimizer.state_dict()
+            # Convert to CPU
+            for state in optim_state["state"].values():
+                for k, v in state.items():
+                    state[k] = v.to(torch.device('cuda'))
+
         self.print_log('using warm up, epoch: {}'.format(self.arg.warm_up_epoch))
 
     def save_arg(self):
@@ -275,8 +281,8 @@ class Processor:
         loader = self.data_loader['train']
         self.adjust_learning_rate(epoch)
 
-        state = self.model.state_dict()
-        print("Model keys:", state.keys())
+        #state = self.model.state_dict()
+        #print("Model keys:", state.keys())
 
         loss_value = []
         loss_order_value = []
