@@ -158,7 +158,7 @@ class Processor:
                            order_mode=self.arg.order_mode,
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
-        print("Model keys:", self.model.state_dict().keys())
+        print("Model keys:", self.model.state_dict().keys()[0])
         #print(self.model)
         self.model = nn.DataParallel(self.model)
         self.loss = build_loss(self.arg).cuda(output_device)
@@ -190,8 +190,8 @@ class Processor:
                 self.model.load_state_dict(weights)
             except:
                 state = self.model.state_dict()
-                print("Weight keys:", weights.keys())
-                print("Model keys:", state.keys())
+                print("Weight keys:", weights.keys()[0])
+                print("Model keys:", state.keys()[0])
                 diff = list(set(state.keys()).difference(set(weights.keys())))
                 print('Can not find these weights:')
                 for d in diff:
@@ -363,7 +363,7 @@ class Processor:
         
         weights= torch.load(self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
         self.model.load_state_dict(weights)
-        print("Model weight name: ", list(self.model.state_dict().keys()))
+        print("Model weight name: ", list(self.model.state_dict().keys())[0])
         print("Load model successfully")
         
 
