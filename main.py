@@ -159,6 +159,7 @@ class Processor:
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print(self.model)
+        self.model = nn.DataParallel(self.model)
         self.loss = build_loss(self.arg).cuda(output_device)
 
         if self.arg.weights:
@@ -277,6 +278,8 @@ class Processor:
         timer = dict(dataloader=0.001, model=0.001, statistics=0.001)
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
+
+        print("Model on", next(self.model.parameters()).device)
 
         '''    
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
