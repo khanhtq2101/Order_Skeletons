@@ -159,7 +159,7 @@ class Processor:
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print(self.model)
-        self.model = nn.DataParallel(self.model, device_ids=[0, 1])
+        self.model = nn.DataParallel(self.model, device_ids=[0])
         self.loss = build_loss(self.arg).cuda(output_device)
 
         if self.arg.weights:
@@ -282,6 +282,17 @@ class Processor:
         roll_back_step = self.global_step
 
         # train model with real data
+        state_dict = self.model.state_dict()
+            weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
+            torch.save(weights,
+                       self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+            torch.save(self.model.state_dict(),
+                       self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+            torch.save(self.optimizer.state_dict(),
+                       self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+
+        return
+
         for batch_idx, (data, label, order_label, index) in enumerate(process):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -356,8 +367,9 @@ class Processor:
             weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
             torch.save(weights,
                        self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-            optim_state_dict = self.optimizer.state_dict()
-            torch.save(optim_state_dict,
+            torch.save(self.model.state_dict(),
+                       self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+            torch.save(self.optimizer.state_dict(),
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
 
         
@@ -458,8 +470,9 @@ class Processor:
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
                 self.train(epoch, save_model=save_model)
-                self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
-
+                #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
+            
+            '''
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             # test the best model
@@ -500,6 +513,7 @@ class Processor:
             #self.eval(epoch=0, save_score=self.arg.save_score, loader_name=['test'], wrong_file=wf, result_file=rf)
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
+            '''
 
 
 if __name__ == '__main__':
