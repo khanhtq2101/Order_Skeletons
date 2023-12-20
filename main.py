@@ -158,7 +158,9 @@ class Processor:
                            order_mode=self.arg.order_mode,
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
-        
+        #print(self.model)
+        self.loss = build_loss(self.arg).cuda(output_device)
+
         if self.arg.weights:
             self.global_step = 0
             try:
@@ -192,10 +194,6 @@ class Processor:
                     print('  ' + d)
                 state.update(weights)
                 self.model.load_state_dict(state, strict=False)
-        #print(self.model)
-        self.model = nn.DataParallel(self.model, device_ids=[0, 1])
-        self.loss = build_loss(self.arg).cuda(output_device)
-
 
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
@@ -280,7 +278,7 @@ class Processor:
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        
+        '''    
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -350,7 +348,7 @@ class Processor:
             '\tMean training loss: {:.4f}.  Mean training acc: {:.2f}%. Mean training order loss: {:.4f}.  Mean training  order acc: {:.2f}%.'.format(np.mean(loss_value),
                                                                                 np.mean(acc_value) * 100, np.mean(loss_order_value), np.mean(acc_order_value) * 100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
-
+        '''
         if save_model:
             torch.save(self.model.state_dict(),
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
@@ -372,7 +370,7 @@ class Processor:
             pred_list = []
             step = 0
             process = tqdm(self.data_loader[ln], ncols=40)
-
+            
             for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
                 with torch.no_grad():
@@ -423,7 +421,6 @@ class Processor:
                 with open('{}/epoch{}_{}_score.pkl'.format(
                         self.arg.work_dir, epoch + 1, ln), 'wb') as f:
                     pickle.dump(score_dict, f)
-
             # acc for each class:
             label_list = np.concatenate(label_list)
             pred_list = np.concatenate(pred_list)
@@ -447,20 +444,21 @@ class Processor:
 
             def count_parameters(model):
                 return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
+            
+            self.model = nn.DataParallel(self.model)
             self.print_log(f'# Parameters: {count_parameters(self.model)}')
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
                 save_model = 1
                 self.train(epoch, save_model=save_model)
-                self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
+                #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             # test the best model
-            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-' + str(self.best_acc_epoch) + '*'))[0]
+            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]
             weights = torch.load(weights_path)
             if type(self.arg.device) is list:
                 if len(self.arg.device) > 1:
