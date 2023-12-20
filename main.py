@@ -190,7 +190,7 @@ class Processor:
             try:
                 self.model.load_state_dict(weights)
                 print("Load model successfully")
-                print("Weight keys:", weights.keys())
+                #print("Weight keys:", weights.keys())
             except:
                 state = self.model.state_dict()
                 #print("Weight keys:", weights.keys())
@@ -287,7 +287,7 @@ class Processor:
 
         print("Model on", next(self.model.parameters()).device)
 
-        '''    
+    
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -357,7 +357,7 @@ class Processor:
             '\tMean training loss: {:.4f}.  Mean training acc: {:.2f}%. Mean training order loss: {:.4f}.  Mean training  order acc: {:.2f}%.'.format(np.mean(loss_value),
                                                                                 np.mean(acc_value) * 100, np.mean(loss_order_value), np.mean(acc_order_value) * 100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
-        '''
+        
         if save_model:
             torch.save(self.model.state_dict(),
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
