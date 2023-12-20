@@ -279,7 +279,7 @@ class Processor:
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        '''
+        
         for batch_idx, (data, label, order_label, index) in enumerate(process):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -334,7 +334,7 @@ class Processor:
             self.train_writer.add_scalar('lr', self.lr, self.global_step)
             timer['statistics'] += self.split_time()
         
-        '''
+        
 
         self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
         self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
@@ -452,10 +452,10 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
 
-                self.train(epoch, save_model=1)
-                #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
+                self.train(epoch, save_model=save_model)
+                self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
-            '''
+            
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             # test the best model
@@ -496,7 +496,7 @@ class Processor:
             #self.eval(epoch=0, save_score=self.arg.save_score, loader_name=['test'], wrong_file=wf, result_file=rf)
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
-            '''
+            
 
 
 if __name__ == '__main__':
