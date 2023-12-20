@@ -283,13 +283,13 @@ class Processor:
 
         # train model with real data
         state_dict = self.model.state_dict()
-            weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
-            torch.save(weights,
-                       self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-            torch.save(self.model.state_dict(),
-                       self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-            torch.save(self.optimizer.state_dict(),
-                       self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+        weights = OrderedDict([[k.split('module.')[-1], v.cpu()] for k, v in state_dict.items()])
+        torch.save(weights,
+                    self.arg.model_saved_name + '-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+        torch.save(self.model.state_dict(),
+                    self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+        torch.save(self.optimizer.state_dict(),
+                    self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
 
         return
 
