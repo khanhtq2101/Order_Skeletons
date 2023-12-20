@@ -355,6 +355,8 @@ class Processor:
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
             torch.save(self.optimizer.state_dict(),
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
+            optim_state = self.optimizer.state_dict()
+            self.optimizer.load_state_dict(optim_state)
 
         
 
