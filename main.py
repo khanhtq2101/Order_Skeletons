@@ -190,6 +190,7 @@ class Processor:
             except:
                 state = self.model.state_dict()
                 print("Weight keys:", weights.keys())
+                print("Model keys:", state.keys())
                 diff = list(set(state.keys()).difference(set(weights.keys())))
                 print('Can not find these weights:')
                 for d in diff:
