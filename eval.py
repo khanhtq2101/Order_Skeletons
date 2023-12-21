@@ -463,16 +463,18 @@ class Processor:
             
             self.print_log(f'# Parameters: {count_parameters(self.model)}')
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
-                save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
-                        epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
-                self.train(epoch, save_model=save_model)
+                weights_path = glob.glob(os.path.join(self.arg.result_dir, 'runs-model-' + str(epoch) + '*'))[0]
+                print(weights_path)
+                weights= torch.load(weights_path)
+                self.model.load_state_dict(weights)
+
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             # test the best model
-            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]
+            weights_path = glob.glob(os.path.join(self.arg.result_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]
             weights = torch.load(weights_path)
             if type(self.arg.device) is list:
                 if len(self.arg.device) > 1:

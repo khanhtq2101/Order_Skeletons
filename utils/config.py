@@ -23,6 +23,7 @@ def get_parser():
     parser.add_argument('-model_saved_name', default='')
     parser.add_argument('--config', default='./config/nturgbd-cross-view/test_bone.yaml',
                         help='path to the configuration file')
+    parser.add_argument('--result-dir', default='', help='the work folder for stored results')
 
     # processor
     parser.add_argument('--phase', default='train', help='must be train or test')
