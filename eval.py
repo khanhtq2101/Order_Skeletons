@@ -463,6 +463,7 @@ class Processor:
             
             self.print_log(f'# Parameters: {count_parameters(self.model)}')
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
+                print(os.path.join(self.arg.result_dir, 'runs-model-' + str(epoch) + '*'))
                 weights_path = glob.glob(os.path.join(self.arg.result_dir, 'runs-model-' + str(epoch) + '*'))[0]
                 print(weights_path)
                 weights= torch.load(weights_path)
