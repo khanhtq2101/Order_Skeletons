@@ -164,13 +164,14 @@ class Processor:
         #print("Model keys:", self.model.state_dict().keys())
         self.loss = build_loss(self.arg).cuda(output_device)
 
-        if self.arg.weights:
+        #if self.arg.weights:
+        if 0:
             self.global_step = 0
             try:
                 self.global_step = int(arg.weights[:-3].split('-')[-1])
             except:
                 pass
-
+            
             self.print_log('Load model weights from {}.'.format(self.arg.weights))
             if '.pkl' in self.arg.weights:
                 with open(self.arg.weights, 'r') as f:
