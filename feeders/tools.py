@@ -61,11 +61,13 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     if valid_frame_num == window:
         start_frame = np.random.choice(end - window + 1, size = 2, replace = True)
     else:
+        print("Offset false: ", start_frame, end)
         offset = min(max((end - window) // 2, 1), window)
         start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
         while (abs(start_frame[1] - start_frame[0]) < offset):
             start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
 
+    print("Offset success: ", start_frame, end)
     start_frame.sort()
     order_label = np.random.randint(2)
     if order_label == 1:
