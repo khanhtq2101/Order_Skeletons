@@ -84,11 +84,22 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     #print("Start frame:", start_frame)    
     data = torch.cat([clip1, clip2])
         
-
     #print("clip shape", clip1.shape)
     #print("Crop output size: ", data.shape)
 
     return data.numpy(), order_label #shape (2*3, window, 25, 2)
+
+def valid_crop_random_eval(data_numpy, valid_frame_num, p_interval, window):
+    # input: C,T,V,M
+    C, T, V, M = data_numpy.shape
+    begin = 0
+    end = valid_frame_num
+    valid_size = end - begin
+
+    start_frame = np.random.randint(end - window + 1)
+ 
+    clip = data_numpy[:, start_frame :window + start_frame, :, :]
+    return clip
 
 def downsample(data_numpy, step, random_sample=True):
     # input: C,T,V,M

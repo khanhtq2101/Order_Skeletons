@@ -180,7 +180,7 @@ class Feeder(Dataset):
             
             return data_numpy, label, order_label, index
         else:
-            data_numpy = tools.valid_crop_resize(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+            data_numpy = tools.valid_crop_random_eval(data_numpy, valid_frame_num, self.p_interval, self.window_size)
             if self.random_rot:
                 #randomly rotate from (-0.3, 0.3)
                 #matmul skeleton with rotation 
@@ -191,7 +191,6 @@ class Feeder(Dataset):
                 data_numpy = tools.random_mask(data_numpy)
             #augmentation 
             return data_numpy, label, index
-        
         
 
     def top_k(self, score, top_k):
