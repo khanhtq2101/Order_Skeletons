@@ -295,7 +295,7 @@ class Processor:
         roll_back_step = self.global_step
 
     
-        for batch_idx, (data, label, order_label, index) in enumerate(process):
+        for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
             data = data.view(2*B, int(C/2), T, V, M)
