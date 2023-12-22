@@ -56,36 +56,27 @@ def valid_crop_random(data_numpy, valid_frame_num, p_interval, window):
     C, T, V, M = data_numpy.shape
     begin = 0
     end = valid_frame_num
-    #if valid_frame_num == window:
-    #    print("AAAAAAAAAAAA end value", end, "window", window)
     valid_size = end - begin
-    #print("begin", data_numpy.shape)
 
     if valid_frame_num == window:
         start_frame = np.random.choice(end - window + 1, size = 2, replace = True)
     else:
+        offset = min(max((end - window) // 2, 1), window)
         start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
+        while (abs(start_frame[1] - start_frame[0]) < offset):
+            start_frame = np.random.choice(end - window + 1, size = 2, replace = False)
+
     start_frame.sort()
     order_label = np.random.randint(2)
     if order_label == 1:
       start_frame = np.flip(start_frame)
 
-    #print("Start framse:", start_frame, "order label", order_label)
-
     clip1 = data_numpy[:, start_frame[0]  :window + start_frame[0], :, :]
     clip1 = torch.tensor(clip1, dtype= torch.float)
     clip2 = data_numpy[:, start_frame[1]  :window + start_frame[1], :, :]
     clip2 = torch.tensor(clip2, dtype= torch.float)
-    
-    #concatenate two clips on channel dimension
-    #print("c1", clip1.shape)
-    #print("c2", clip2.shape)
-    #print("Valid size", valid_size)
-    #print("Start frame:", start_frame)    
+ 
     data = torch.cat([clip1, clip2])
-        
-    #print("clip shape", clip1.shape)
-    #print("Crop output size: ", data.shape)
 
     return data.numpy(), order_label #shape (2*3, window, 25, 2)
 
@@ -99,6 +90,18 @@ def valid_crop_random_eval(data_numpy, valid_frame_num, p_interval, window):
     start_frame = np.random.randint(end - window + 1)
  
     clip = data_numpy[:, start_frame :window + start_frame, :, :]
+    return clip
+
+def valid_crop_random_test(data_numpy, valid_frame_num, p_interval, window):
+    # input: C,T,V,M
+    C, T, V, M = data_numpy.shape
+    begin = 0
+    end = valid_frame_num
+    valid_size = end - begin
+
+    n_clip = end // window
+ 
+    clip = [data_numpy[:, i*window : (i+1)*window, :, :] for i in range(n_clip)]
     return clip
 
 def downsample(data_numpy, step, random_sample=True):
