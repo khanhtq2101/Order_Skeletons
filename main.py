@@ -294,7 +294,6 @@ class Processor:
         process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-    
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -350,7 +349,6 @@ class Processor:
             timer['statistics'] += self.split_time()
         
         
-
         self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
         self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
         self.train_writer.add_scalar('loss_order', np.mean(loss_order_value), epoch)

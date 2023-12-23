@@ -185,8 +185,10 @@ class Feeder(Dataset):
                 #randomly rotate from (-0.3, 0.3)
                 #matmul skeleton with rotation 
                 data_numpy = tools.random_rot(data_numpy)
+            if self.random_scale:
                 #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
                 data_numpy = tools.random_scale(data_numpy)
+            if self.random_mask:
                 #mask 0.25, randomly erase several frames of data
                 data_numpy = tools.random_mask(data_numpy)
             #augmentation 
