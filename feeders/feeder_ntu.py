@@ -197,9 +197,7 @@ class Feeder(Dataset):
 
     def top_k(self, score, top_k):
         rank = score.argsort()
-        print(self.label.shape)
-        #hit_top_k = [l in rank[i, -top_k:] for i, l in enumerate(self.label)]
-        hit_top_k = [self.label[i] in rank[i, -top_k:] for i in range(100)]
+        hit_top_k = [l in rank[i, -top_k:] for i, l in enumerate(self.label)]
         return sum(hit_top_k) * 1.0 / len(hit_top_k)
 
 
