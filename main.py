@@ -595,12 +595,12 @@ class Processor:
 
             if self.arg.weights is None:
                 raise ValueError('Please appoint --weights.')
-            self.arg.print_log = False
+            self.arg.print_log = True
             self.print_log('Model:   {}.'.format(self.arg.model))
             self.print_log('Weights: {}.'.format(self.arg.weights))
             self.test(0, save_score=self.arg.save_score, loader_name=['test_final'])
 
-            wrong_analyze(wf, rf)
+            #wrong_analyze(wf, rf)
             self.print_log('Done.\n')
             
 
