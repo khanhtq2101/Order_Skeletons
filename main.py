@@ -473,7 +473,7 @@ class Processor:
             
             for batch_idx, (data, label, index) in enumerate(process):
                 label_list.append(label)
-                print("Data shape:", data.shape)
+                #print("Data shape:", data.shape)
                 
                 B, C, T, V, M = data.shape
                 data = data.view(-1, 3, T, V, M)
@@ -483,9 +483,9 @@ class Processor:
                     label = label.long().cuda(self.output_device)
                     output = self.model(calc_diff_modality(data, **self.test_modality))
                     
-                    print("output shape:", output.shape)        
+                    #print("output shape:", output.shape)        
                     output = output.mean(0, keepdim = True)
-                    print("Mean shape:", output.shape)     
+                    #print("Mean shape:", output.shape)     
                     
                     score_frag.append(output.data.cpu().numpy())
 
