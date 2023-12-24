@@ -501,8 +501,7 @@ class Processor:
                             f_r.write(str(x) + ',' + str(true[i]) + '\n')
                         if x != true[i] and wrong_file is not None:
                             f_w.write(str(index[i]) + ',' + str(x) + ',' + str(true[i]) + '\n')
-                if batch_idx == 100:
-                    break
+
             score = np.concatenate(score_frag)
             if 'ucla' in self.arg.feeder:
                 self.data_loader[ln].dataset.sample_name = np.arange(len(score))
