@@ -102,7 +102,7 @@ def valid_crop_random_test(data_numpy, valid_frame_num, p_interval, window):
     n_clip = end // window
     begin = (end - n_clip*window) // 2
  
-    data = torch.cat([data_numpy[:, begin+ i*window : begin + (i+1)*window, :, :] for i in range(n_clip)])
+    data = torch.cat([torch.tensor(data_numpy[:, begin+ i*window : begin + (i+1)*window, :, :]) for i in range(n_clip)])
     return data.numpy() #shape (n_clip*3, window, 25, 2)
 
 
