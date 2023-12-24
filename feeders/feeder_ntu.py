@@ -68,7 +68,7 @@ ntu120_class_name_short = [
 class Feeder(Dataset):
     def __init__(self, data_path, label_path=None, p_interval=1, split='train', random_choose=False, random_shift=False,
                  random_move=False, random_rot=False, random_scale=False, random_mask=False, window_size=-1, normalization=False, debug=False, use_mmap=False,
-                 bone=False, vel=False, order_mode = 0):
+                 bone=False, vel=False, order_mode = 0, phase = 'train'):
         """
         :param data_path:
         :param label_path:
@@ -107,6 +107,7 @@ class Feeder(Dataset):
         self.load_data()
 
         self.order_mode = order_mode
+        self.phase = phase
 
         if normalization:
             self.get_mean_map()
@@ -179,20 +180,19 @@ class Feeder(Dataset):
                                         tools.random_mask(data_numpy[3:, :, : :])), dim = 0)
             
             return data_numpy, label, order_label, index
-        else:
+        elif self.phase == 'val':
             data_numpy = tools.valid_crop_random_eval(data_numpy, valid_frame_num, self.p_interval, self.window_size)
             if self.random_rot:
-                #randomly rotate from (-0.3, 0.3)
-                #matmul skeleton with rotation 
                 data_numpy = tools.random_rot(data_numpy)
             if self.random_scale:
-                #lengthen bones with factor (-0.2 + 1, 0.2 + 1)
                 data_numpy = tools.random_scale(data_numpy)
             if self.random_mask:
-                #mask 0.25, randomly erase several frames of data
                 data_numpy = tools.random_mask(data_numpy)
-            #augmentation 
             return data_numpy, label, index
+        elif self.phase == 'test':
+            #shape (n_clip*3, T, V, M)
+            data_numpy = tools.valid_crop_random_test(data_numpy, valid_frame_num, self.p_interval, self.window_size)
+            return data_numpy, label, index    
         
 
     def top_k(self, score, top_k):

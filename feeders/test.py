@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from cmath import phase
 
 import inspect
 import os
@@ -138,7 +137,7 @@ class Processor:
             )
 
         self.data_loader['test'] = torch.utils.data.DataLoader(
-            dataset=Feeder(**self.arg.test_feeder_args, order_mode = 0, phase= 'val'),
+            dataset=Feeder(**self.arg.test_feeder_args, order_mode = 0),
             batch_size=self.arg.test_batch_size,
             shuffle=False,
             num_workers=self.arg.num_worker,
@@ -148,14 +147,6 @@ class Processor:
             bone=self.data_loader['test'].dataset.bone,
             vel=self.data_loader['test'].dataset.vel,
         )
-
-        self.data_loader['test_final'] = torch.utils.data.DataLoader(
-            dataset=Feeder(**self.arg.test_feeder_args, order_mode = 0, phase = 'test'),
-            batch_size=1,
-            shuffle=False,
-            num_workers=self.arg.num_worker,
-            drop_last=False,
-            worker_init_fn=init_seed)
 
     def load_model(self):
         output_device = self.arg.device[0] if type(self.arg.device) is list else self.arg.device
@@ -456,91 +447,10 @@ class Processor:
                 writer.writerow(each_acc)
                 writer.writerows(confusion)
 
-    def test(self, epoch, save_score=False, loader_name=['test_final'], wrong_file=None, result_file=None):
-        if wrong_file is not None:
-            f_w = open(wrong_file, 'w')
-        if result_file is not None:
-            f_r = open(result_file, 'w')
-        self.model.eval()
-        self.print_log('Eval epoch: {}'.format(epoch + 1))
-        for ln in loader_name:
-            loss_value = []
-            score_frag = []
-            label_list = []
-            pred_list = []
-            step = 0
-            process = tqdm(self.data_loader[ln], ncols=40)
-            
-            for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
-                label_list.append(label)
-                
-                B, C, T, V, M = data.shape
-                data = data.view(-1, 3, T, V, M)
-                
-                with torch.no_grad():
-                    data = data.float().cuda(self.output_device)
-                    label = label.long().cuda(self.output_device)
-                    output = self.model(calc_diff_modality(data, **self.test_modality))
-                    
-                    print("output shape:", output.shape)             
-                    
-                    score_frag.append(output.data.cpu().numpy())
-
-                    _, predict_label = torch.max(output.data, 1)
-                    pred_list.append(predict_label.data.cpu().numpy())
-                    step += 1
-
-                if wrong_file is not None or result_file is not None:
-                    predict = list(predict_label.cpu().numpy())
-                    true = list(label.data.cpu().numpy())
-                    for i, x in enumerate(predict):
-                        if result_file is not None:
-                            f_r.write(str(x) + ',' + str(true[i]) + '\n')
-                        if x != true[i] and wrong_file is not None:
-                            f_w.write(str(index[i]) + ',' + str(x) + ',' + str(true[i]) + '\n')
-            score = np.concatenate(score_frag)
-            loss = np.mean(loss_value)
-            if 'ucla' in self.arg.feeder:
-                self.data_loader[ln].dataset.sample_name = np.arange(len(score))
-            accuracy = self.data_loader[ln].dataset.top_k(score, 1)
-            if accuracy > self.best_acc:
-                self.best_acc = accuracy
-                self.best_acc_epoch = epoch + 1
-
-            print('Accuracy: ', accuracy, ' model: ', self.arg.model_saved_name)
-            if self.arg.phase == 'train':
-                self.val_writer.add_scalar('loss', loss, epoch)
-                self.val_writer.add_scalar('acc', accuracy, epoch)
-
-            score_dict = dict(
-                zip(self.data_loader[ln].dataset.sample_name, score))
-            self.print_log('\tMean {} loss of {} batches: {}.'.format(
-                ln, len(self.data_loader[ln]), np.mean(loss_value)))
-            for k in self.arg.show_topk:
-                self.print_log('\tTop{}: {:.2f}%'.format(
-                    k, 100 * self.data_loader[ln].dataset.top_k(score, k)))
-
-            if save_score:
-                with open('{}/epoch{}_{}_score.pkl'.format(
-                        self.arg.work_dir, epoch + 1, ln), 'wb') as f:
-                    pickle.dump(score_dict, f)
-            # acc for each class:
-            label_list = np.concatenate(label_list)
-            pred_list = np.concatenate(pred_list)
-            confusion = confusion_matrix(label_list, pred_list)
-            list_diag = np.diag(confusion)
-            list_raw_sum = np.sum(confusion, axis=1)
-            each_acc = list_diag / list_raw_sum
-            with open('{}/epoch{}_{}_each_class_acc.csv'.format(self.arg.work_dir, epoch + 1, ln), 'w') as f:
-                writer = csv.writer(f)
-                writer.writerow(each_acc)
-                writer.writerows(confusion)
-
-
     def start(self):
         if self.arg.phase == 'train':
             if self.arg.optim_state_path:
-                self.arg.start_epoch = int(self.arg.optim_state_path.split('-')[-2])
+                self.arg.start_epoch = int(self.arg.optim_state_path.split('-')[-2]) #minus 1 or not ???
                 print("Start epoch:", self.arg.start_epoch + 1)
 
             self.print_log('Parameters:\n{}\n'.format(str(vars(self.arg))))
@@ -561,8 +471,7 @@ class Processor:
 
             # test the best model
             self.arg.phase == 'test'
-            
-            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]     
+            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]
             weights = torch.load(weights_path)
             if type(self.arg.device) is list:
                 if len(self.arg.device) > 1:
@@ -574,7 +483,7 @@ class Processor:
             self.arg.print_log = False
 
             self.eval(epoch=0, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
-
+            
             wrong_analyze(wf, rf)
             self.arg.print_log = True
 
@@ -598,7 +507,7 @@ class Processor:
             self.arg.print_log = False
             self.print_log('Model:   {}.'.format(self.arg.model))
             self.print_log('Weights: {}.'.format(self.arg.weights))
-            self.test(epoch, save_score=self.arg.save_score, loader_name=['test_final'])
+            #self.eval(epoch=0, save_score=self.arg.save_score, loader_name=['test'], wrong_file=wf, result_file=rf)
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
             

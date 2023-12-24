@@ -100,9 +100,11 @@ def valid_crop_random_test(data_numpy, valid_frame_num, p_interval, window):
     valid_size = end - begin
 
     n_clip = end // window
+    begin = (end - n_clip*window) // 2
  
-    clip = [data_numpy[:, i*window : (i+1)*window, :, :] for i in range(n_clip)]
-    return clip
+    data = torch.cat([data_numpy[:, begin+ i*window : begin + (i+1)*window, :, :] for i in range(n_clip)])
+    return data.numpy() #shape (n_clip*3, window, 25, 2)
+
 
 def downsample(data_numpy, step, random_sample=True):
     # input: C,T,V,M
