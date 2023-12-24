@@ -462,16 +462,16 @@ class Processor:
         if result_file is not None:
             f_r = open(result_file, 'w')
         self.model.eval()
-        self.print_log('Eval epoch: {}'.format(epoch + 1))
+        self.print_log('Test epoch: {}'.format(epoch + 1))
         for ln in loader_name:
             loss_value = []
             score_frag = []
             label_list = []
             pred_list = []
             step = 0
-            process = tqdm(self.data_loader[ln], ncols=40)
+            #process = tqdm(self.data_loader[ln], ncols=40)
             
-            for batch_idx, (data, label, index) in enumerate(process):
+            for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
                 #print("Data shape:", data.shape)
                 
@@ -571,9 +571,9 @@ class Processor:
 
             wf = weights_path.replace('.pt', '_wrong.txt')
             rf = weights_path.replace('.pt', '_right.txt')
-            self.arg.print_log = False
+            self.arg.print_log = True
 
-            self.eval(epoch=0, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
+            self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
 
             wrong_analyze(wf, rf)
             self.arg.print_log = True
