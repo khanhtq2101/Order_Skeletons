@@ -473,6 +473,7 @@ class Processor:
             
             for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
+                print("Data shape:", data.shape)
                 
                 B, C, T, V, M = data.shape
                 data = data.view(-1, 3, T, V, M)
@@ -599,6 +600,7 @@ class Processor:
             self.print_log('Model:   {}.'.format(self.arg.model))
             self.print_log('Weights: {}.'.format(self.arg.weights))
             self.test(epoch, save_score=self.arg.save_score, loader_name=['test_final'])
+
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
             
