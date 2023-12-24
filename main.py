@@ -599,7 +599,7 @@ class Processor:
             self.arg.print_log = False
             self.print_log('Model:   {}.'.format(self.arg.model))
             self.print_log('Weights: {}.'.format(self.arg.weights))
-            self.test(epoch, save_score=self.arg.save_score, loader_name=['test_final'])
+            self.test(0, save_score=self.arg.save_score, loader_name=['test_final'])
 
             wrong_analyze(wf, rf)
             self.print_log('Done.\n')
