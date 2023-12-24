@@ -471,7 +471,7 @@ class Processor:
             step = 0
             process = tqdm(self.data_loader[ln], ncols=40)
             
-            for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
+            for batch_idx, (data, label, index) in enumerate(process):
                 label_list.append(label)
                 print("Data shape:", data.shape)
                 
@@ -483,7 +483,9 @@ class Processor:
                     label = label.long().cuda(self.output_device)
                     output = self.model(calc_diff_modality(data, **self.test_modality))
                     
-                    print("output shape:", output.shape)             
+                    print("output shape:", output.shape)        
+                    output = output.mean(0, keepdim = True)
+                    print("Mean shape:", output.shape)     
                     
                     score_frag.append(output.data.cpu().numpy())
 
@@ -500,7 +502,6 @@ class Processor:
                         if x != true[i] and wrong_file is not None:
                             f_w.write(str(index[i]) + ',' + str(x) + ',' + str(true[i]) + '\n')
             score = np.concatenate(score_frag)
-            loss = np.mean(loss_value)
             if 'ucla' in self.arg.feeder:
                 self.data_loader[ln].dataset.sample_name = np.arange(len(score))
             accuracy = self.data_loader[ln].dataset.top_k(score, 1)
@@ -509,9 +510,6 @@ class Processor:
                 self.best_acc_epoch = epoch + 1
 
             print('Accuracy: ', accuracy, ' model: ', self.arg.model_saved_name)
-            if self.arg.phase == 'train':
-                self.val_writer.add_scalar('loss', loss, epoch)
-                self.val_writer.add_scalar('acc', accuracy, epoch)
 
             score_dict = dict(
                 zip(self.data_loader[ln].dataset.sample_name, score))
