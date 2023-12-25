@@ -18,7 +18,7 @@ train_feeder_args:
   bone: True
 
 test_feeder_args:
-  data_path: data/ntu/NTU60_CS.npz
+  data_path: /kaggle/input/ntu60-skeletons/NTU60_CS.npz
   split: test
   window_size: 32
   p_interval: [0.95]
