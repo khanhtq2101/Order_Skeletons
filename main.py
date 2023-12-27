@@ -386,9 +386,9 @@ class Processor:
             label_list = []
             pred_list = []
             step = 0
-            #process = tqdm(self.data_loader[ln], ncols=40)
+            process = tqdm(self.data_loader[ln], ncols=40)
             
-            for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
+            for batch_idx, (data, label, index) in enumerate(process):
                 label_list.append(label)
                 with torch.no_grad():
                     data = data.float().cuda(self.output_device)
