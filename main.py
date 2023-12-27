@@ -149,14 +149,6 @@ class Processor:
             vel=self.data_loader['test'].dataset.vel,
         )
 
-        self.data_loader['test_final'] = torch.utils.data.DataLoader(
-            dataset=Feeder(**self.arg.test_feeder_args, order_mode = 0, phase = 'test'),
-            batch_size=1,
-            shuffle=False,
-            num_workers=self.arg.num_worker,
-            drop_last=False,
-            worker_init_fn=init_seed)
-
     def load_model(self):
         output_device = self.arg.device[0] if type(self.arg.device) is list else self.arg.device
         self.output_device = output_device
@@ -318,9 +310,7 @@ class Processor:
             timer['dataloader'] += self.split_time()
 
             # forward
-            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label, label)
-            print(order_pred.shape)
-            
+            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label, label)            
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
@@ -396,7 +386,7 @@ class Processor:
             label_list = []
             pred_list = []
             step = 0
-            process = tqdm(self.data_loader[ln], ncols=40)
+            #process = tqdm(self.data_loader[ln], ncols=40)
             
             for batch_idx, (data, label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
