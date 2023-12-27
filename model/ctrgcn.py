@@ -204,8 +204,11 @@ class Model(nn.Module):
             offset = min(max((T - window) // 2, 1), window)
             while (abs(start_frame[1] - start_frame[0]) < offset):
                 start_frame = np.random.choice(T - window, size = 2, replace = False)
-            
-            print("Start frames:", i, start_frame)
+            start_frame.sort()
+
+            if label.item():
+                start_frame = np.flip(start_frame)
+            print("Start frames:", i, start_frame, label.item())
             start_frames[i, :] = start_frame
             
             
