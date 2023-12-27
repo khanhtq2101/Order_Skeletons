@@ -179,7 +179,6 @@ class Model(nn.Module):
         
         if self.training:
             order_pred = self.order_head(clips_feat_fin)
-            print(order_pred.shape)
             return self.fc(x), order_pred
         else:
             return self.fc(x)
