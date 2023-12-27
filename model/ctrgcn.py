@@ -205,7 +205,7 @@ class Model(nn.Module):
 
             start_frames[i, :] = start_frames
             
-        print("Start frames:",start_frames))
+        print("Start frames:", start_frames)
 
 
         order_label = torch.randint(high= 2, size = (N, ))
