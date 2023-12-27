@@ -188,18 +188,24 @@ class Model(nn.Module):
 
         print("Before:", feat_fin.shape)
         feat_fin = feat_fin.view(-1, M, C, T, V)
+
         print("After:", feat_fin.shape)
+        #mean person
         feat_fin = feat_fin.mean(1)
         print("After mean:", feat_fin.shape)
+        print("Order label shape:", order_label.shape)
 
         window = T // 2
-
-        start_frame = np.random.choice(T - window, size = 2, replace = False)
-        offset = min(max((T - window) // 2, 1), window)
-        while (abs(start_frame[1] - start_frame[0]) < offset):
+        start_frames = np.zeros((feat_fin.shape[0], 2))
+        for lable, i in enumerate(order_label):
             start_frame = np.random.choice(T - window, size = 2, replace = False)
-        
-        print("Length {} offset {} window {} start frame".format(T, offset, window, start_frame))
+            offset = min(max((T - window) // 2, 1), window)
+            while (abs(start_frame[1] - start_frame[0]) < offset):
+                start_frame = np.random.choice(T - window, size = 2, replace = False)
+
+            start_frames[i, :] = start_frames
+            
+        print("Start frames:",start_frames))
 
 
         order_label = torch.randint(high= 2, size = (N, ))
