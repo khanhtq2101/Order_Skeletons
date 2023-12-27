@@ -197,15 +197,18 @@ class Model(nn.Module):
 
         window = T // 2
         start_frames = np.zeros((feat_fin.shape[0], 2))
-        for lable, i in enumerate(order_label):
+        print(start_frames.shape)
+
+        for label, i in enumerate(order_label):
             start_frame = np.random.choice(T - window, size = 2, replace = False)
             offset = min(max((T - window) // 2, 1), window)
             while (abs(start_frame[1] - start_frame[0]) < offset):
                 start_frame = np.random.choice(T - window, size = 2, replace = False)
-
+            
+            print("Start frames:", i, start_frames)
             start_frames[i, :] = start_frame
             
-        print("Start frames:", start_frames)
+            
 
 
         order_label = torch.randint(high= 2, size = (N, ))
