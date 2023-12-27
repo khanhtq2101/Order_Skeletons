@@ -214,6 +214,7 @@ class Model(nn.Module):
             start_frames[i, :] = start_frame
         
         print(start_frames)
+        print(feat_fin[i, :, start_frames[0, 0] : start_frames[0, 0] + window, :].shape)
         clip1 = torch.tensor([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :] for i in range(feat_fin.shape[0])])
         clip2 = torch.tensor([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :] for i in range(feat_fin.shape[0])])
 
