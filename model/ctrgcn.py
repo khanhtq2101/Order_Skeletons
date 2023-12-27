@@ -199,7 +199,7 @@ class Model(nn.Module):
         start_frames = np.zeros((feat_fin.shape[0], 2))
         print(start_frames.shape)
 
-        for label, i in enumerate(order_label):
+        for i, label in enumerate(order_label):
             start_frame = np.random.choice(T - window, size = 2, replace = False)
             offset = min(max((T - window) // 2, 1), window)
             while (abs(start_frame[1] - start_frame[0]) < offset):
