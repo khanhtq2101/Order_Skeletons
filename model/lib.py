@@ -196,12 +196,12 @@ class ST_RenovateNet(nn.Module):
                                             nn.BatchNorm2d(h_channel // n_frame), nn.ReLU(True))
 
 
-    def forward(self, raw_feat, lbl, logit, **kwargs):
-        # raw_feat: [N * M, C, T, V]
-        raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        #print("Raw feature shape", raw_feat.shape)
+    def forward(self, clips_feat_fin, lbl, logit, **kwargs):
+        # clips_feat_fin: [N * M, C, T, V]
+        clips_feat_fin = clips_feat_fin.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
+        #print("Raw feature shape", clips_feat_fin.shape)
         
-        spatio_feat = raw_feat.mean(1).mean(-2, keepdim=True) #person and temporal dim mean
+        spatio_feat = clips_feat_fin.mean(1).mean(-2, keepdim=True) #person and temporal dim mean
         #print("Spatial shape", spatio_feat.shape)
         spatio_feat = self.spatio_squeeze(spatio_feat)
         #print("Spatial shape", spatio_feat.shape)
@@ -211,7 +211,7 @@ class ST_RenovateNet(nn.Module):
         
         #spatio_cl_loss = self.spatio_cl_net(spatio_feat, lbl, logit, **kwargs)
 
-        tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) 
+        tempor_feat = clips_feat_fin.mean(1).mean(-1, keepdim=True) 
         tempor_feat = self.tempor_squeeze(tempor_feat)
         #print("tem shape", tempor_feat.shape)
         tempor_feat = tempor_feat.flatten(1)
@@ -247,30 +247,26 @@ class Order_Head(nn.Module):
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)
 
-    def forward(self, raw_feat, **kwargs):
-        # raw_feat: [2N * M, C, T, V]
-        # with batch 64: [256, C, T, V]
+    def forward(self, clips_feat_fin, **kwargs):
+        # clips_feat_fin: 2N, 4C, T/8, V
+        N, C, T, V = clips_feat_fin.shape
 
-        #print("raw feature before", raw_feat.shape)
-        raw_feat = raw_feat.view(-1, self.n_person, self.n_channel, self.n_frame, self.n_joint)
-        #print("raw feature", raw_feat.shape) #after reshape: [2N, 2, C, T, V] = [128, 2, 256, 8, 25]
-
-        tempor_feat = raw_feat.mean(1).mean(-1, keepdim=True) #person and spatial (joint) pooling 
-        #print("After person and spatial mean:", tempor_feat.shape) # [2N, C, T, 1] = [128, 256, 8, 1]
+        tempor_feat = clips_feat_fin.mean(-1, keepdim=True) #spatial (joint) pooling 
+        #print("After person and spatial mean:", tempor_feat.shape) 
+        # 2N, 4C, T/8, 1
+        
         tempor_feat = self.tempor_squeeze(tempor_feat)
-        #print("After temporal squeeze:", tempor_feat.shape) # [2N, C, T, 1] = [128, 32, 8, 1]
+        #print("After temporal squeeze:", tempor_feat.shape) 
+        # [2N, C, T, 1] = [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  flatten from dim 1 to end, to [2N, C] = [128, 8*32= 256]
         #print("After flatten:", tempor_feat.shape) # [128, 256]
-
-        c = tempor_feat.shape[-1] 
-        tempor_feat = tempor_feat.view(-1, 2, c) #from [2N, C] to [N, 2, C]
+        
         #print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
         
-        clip1 = tempor_feat[:, 0, :, None, None] 
-        #print("clip1 shape", clip1.shape) # [64, 256, 1, 1]
+        clip1 = tempor_feat[:N//2, :, None, None] 
         clip1 = self.order_U(clip1)
-        clip2 = tempor_feat[:, 1, :, None, None]
+        clip2 = tempor_feat[N//2:, :, None, None]
         clip2 = self.order_V(clip2)
 
         tempor_feat = torch.cat((clip1, clip2), dim= 1)

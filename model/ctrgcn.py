@@ -168,7 +168,8 @@ class Model(nn.Module):
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
-        self.sample_order(feat_fin, M, order_label)
+        #sampling on feature space
+        clips_feat_fin = self.sampling(feat_fin, M, order_label) # 2N, 4C, T/8, V
 
         # N*M,C,T*V
         c_new = x.size(1)
@@ -178,12 +179,13 @@ class Model(nn.Module):
         x = self.drop_out(x)
         
         if self.training:
-            order_pred = self.order_head(feat_fin)
+            order_pred = self.order_head(clips_feat_fin)
+            print(order_pred.shape)
             return self.fc(x), order_pred
         else:
             return self.fc(x)
         
-    def sample_order(self, feat_fin, M, order_label):
+    def sampling(self, feat_fin, M, order_label):
         N, C, T, V = feat_fin.size()
 
         #print("Before:", feat_fin.shape)
@@ -199,7 +201,7 @@ class Model(nn.Module):
 
         window = T // 2
         start_frames = np.zeros((feat_fin.shape[0], 2), dtype = int)
-        print(start_frames.shape)
+        #print(start_frames.shape)
 
         for i, label in enumerate(order_label):
             start_frame = np.random.choice(T - window, size = 2, replace = False)
@@ -213,19 +215,15 @@ class Model(nn.Module):
             #print("Start frames:", i, start_frame, label.item())
             start_frames[i, :] = start_frame
         
-        print(start_frames)
-        print(feat_fin[i, :, start_frames[0, 0] : start_frames[0, 0] + window, :].shape)
+        #print(start_frames)
+        #print(feat_fin[i, :, start_frames[0, 0] : start_frames[0, 0] + window, :].shape)
         clip1 = torch.stack([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :] for i in range(feat_fin.shape[0])])
         clip2 = torch.stack([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :] for i in range(feat_fin.shape[0])])
 
         print("Clip shape:", clip1.shape, clip2.shape)
-        clips = torch.cat((clip1, clip2))
+        clips_feat_fin = torch.cat((clip1, clip2))
 
         print("Concatenate shape:", clips.shape)
 
-            
-            
-
-
-        order_label = torch.randint(high= 2, size = (N, ))
+        return clips_feat_fin
 
