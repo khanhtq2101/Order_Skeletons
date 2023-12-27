@@ -205,7 +205,7 @@ class Model(nn.Module):
             while (abs(start_frame[1] - start_frame[0]) < offset):
                 start_frame = np.random.choice(T - window, size = 2, replace = False)
             
-            print("Start frames:", i, start_frames)
+            print("Start frames:", i, start_frame)
             start_frames[i, :] = start_frame
             
             
