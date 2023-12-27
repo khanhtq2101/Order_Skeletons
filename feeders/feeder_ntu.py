@@ -174,6 +174,7 @@ class Feeder(Dataset):
         # if self.vel:
         #     data_numpy[:, :-1] = data_numpy[:, 1:] - data_numpy[:, :-1]
         #     data_numpy[:, -1] = 0
+            
         if self.order_mode:
             order_label = np.random.randint(2)
             return data_numpy, label, order_label, index 

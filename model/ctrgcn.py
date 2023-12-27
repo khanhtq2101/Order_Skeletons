@@ -167,8 +167,8 @@ class Model(nn.Module):
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
-        self.sample_order(feat_fin)
-        
+        self.sample_order(feat_fin, M)
+
         # N*M,C,T*V
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
@@ -182,11 +182,11 @@ class Model(nn.Module):
         else:
             return self.fc(x)
         
-    def sample_order(self, feat_fin):
+    def sample_order(self, feat_fin, M):
         N, C, T, V = feat_fin.size()
 
         print("Before:", feat_fin.shape)
-        feat_fin = feat_fin.view(-1, self.n_person, C, T, V)
+        feat_fin = feat_fin.view(-1, M, C, T, V)
         print("After:", feat_fin.shape)
         feat_fin = feat_fin.mean(1)
         print("After mean:", feat_fin.shape)
