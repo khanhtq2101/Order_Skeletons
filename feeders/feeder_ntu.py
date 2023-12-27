@@ -177,7 +177,6 @@ class Feeder(Dataset):
             
         if self.order_mode:
             order_label = np.random.randint(2)
-            print("order", order_label)
             return data_numpy, label, order_label, index 
         else: 
             return data_numpy, label, index 

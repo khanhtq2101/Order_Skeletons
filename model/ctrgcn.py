@@ -211,6 +211,8 @@ class Model(nn.Module):
                 start_frame = np.flip(start_frame)
             print("Start frames:", i, start_frame, label.item())
             start_frames[i, :] = start_frame
+        
+        print(start_frames)
             
             
 

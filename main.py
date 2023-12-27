@@ -317,9 +317,8 @@ class Processor:
                 order_label = order_label.long().cuda(self.output_device)
             timer['dataloader'] += self.split_time()
 
-            print("Data shape:", order_label)
             # forward
-            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), label, order_label)
+            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label, label)
 
             break 
 
