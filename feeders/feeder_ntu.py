@@ -175,11 +175,8 @@ class Feeder(Dataset):
         #     data_numpy[:, :-1] = data_numpy[:, 1:] - data_numpy[:, :-1]
         #     data_numpy[:, -1] = 0
             
-        if self.order_mode:
-            order_label = np.random.randint(2)
-            return data_numpy, label, order_label, index 
-        else: 
-            return data_numpy, label, index 
+        order_label = np.random.randint(2)
+        return data_numpy, label, order_label, index 
 
     def top_k(self, score, top_k):
         rank = score.argsort()

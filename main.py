@@ -310,7 +310,7 @@ class Processor:
             timer['dataloader'] += self.split_time()
 
             # forward
-            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label, label)            
+            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label)            
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
@@ -388,7 +388,7 @@ class Processor:
             step = 0
             process = tqdm(self.data_loader[ln], ncols=40)
             
-            for batch_idx, (data, label, index) in enumerate(process):
+            for batch_idx, (data, label, order_label, index) in enumerate(process):
                 label_list.append(label)
                 with torch.no_grad():
                     data = data.float().cuda(self.output_device)

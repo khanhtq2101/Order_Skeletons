@@ -134,7 +134,7 @@ class Model(nn.Module):
                   cl_high * self.multi_cl_weights[2] + cl_fin * self.multi_cl_weights[3]
         return logits, cl_loss
 
-    def forward(self, x, order_label, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
+    def forward(self, x, order_label= None, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
         if len(x.shape) == 3:
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
@@ -167,9 +167,7 @@ class Model(nn.Module):
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
-        #sampling on feature space
-        clips_feat_fin = self.sampling(feat_fin, M, order_label) # 2N, 4C, T/8, V
-
+    
         # N*M,C,T*V
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
@@ -177,7 +175,9 @@ class Model(nn.Module):
         
         x = self.drop_out(x)
         
-        if self.training:
+        if order_label is not None:
+            #sampling on feature space
+            clips_feat_fin = self.sampling(feat_fin, M, order_label) # 2N, 4C, T/8, V
             order_pred = self.order_head(clips_feat_fin)
             return self.fc(x), order_pred
         else:
