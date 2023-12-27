@@ -223,7 +223,7 @@ class Model(nn.Module):
         print("Clip shape:", clip1.shape, clip2.shape)
         clips_feat_fin = torch.cat((clip1, clip2))
 
-        print("Concatenate shape:", clips.shape)
+        print("Concatenate shape:", clips_feat_fin.shape)
 
         return clips_feat_fin
 
