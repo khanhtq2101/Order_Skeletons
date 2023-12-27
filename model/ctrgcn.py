@@ -198,7 +198,7 @@ class Model(nn.Module):
         #print("Order label", order_label)
 
         window = T // 2
-        start_frames = np.zeros((feat_fin.shape[0], 2))
+        start_frames = np.zeros((feat_fin.shape[0], 2), dtype = int)
         print(start_frames.shape)
 
         for i, label in enumerate(order_label):
