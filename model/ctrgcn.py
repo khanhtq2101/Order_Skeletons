@@ -139,7 +139,6 @@ class Model(nn.Module):
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
         N, C, T, V, M = x.size()
-        print("Input shape:", x.shape)
 
         # [N, M, V, C, T]
         x = x.permute(0, 4, 3, 1, 2).contiguous().view(N, M * V * C, T)
@@ -220,10 +219,10 @@ class Model(nn.Module):
         clip1 = torch.stack([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :] for i in range(feat_fin.shape[0])])
         clip2 = torch.stack([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :] for i in range(feat_fin.shape[0])])
 
-        print("Clip shape:", clip1.shape, clip2.shape)
+        #print("Clip shape:", clip1.shape, clip2.shape)
         clips_feat_fin = torch.cat((clip1, clip2))
 
-        print("Concatenate shape:", clips_feat_fin.shape)
+        #print("Concatenate shape:", clips_feat_fin.shape)
 
         return clips_feat_fin
 

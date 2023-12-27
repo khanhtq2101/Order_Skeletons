@@ -319,8 +319,8 @@ class Processor:
 
             # forward
             output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), order_label, label)
-
-            break 
+            print(order_pred.shape)
+            
 
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
