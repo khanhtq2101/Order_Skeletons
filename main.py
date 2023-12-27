@@ -310,13 +310,14 @@ class Processor:
             #B, C, T, V, M= data.shape
             #data = data.view(2*B, int(C/2), T, V, M)
             #label = torch.flatten(label)
-
+            
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
                 label = label.long().cuda(self.output_device)
                 order_label = order_label.long().cuda(self.output_device)
             timer['dataloader'] += self.split_time()
 
+            print("Data shape:", data.shape)
             # forward
             output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), label)
 
@@ -477,7 +478,8 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
                 self.train(epoch, save_model=save_model)
-                self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
+                
+                #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
