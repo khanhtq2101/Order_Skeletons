@@ -194,6 +194,7 @@ class Model(nn.Module):
         feat_fin = feat_fin.mean(1)
         print("After mean:", feat_fin.shape)
         print("Order label shape:", order_label.shape)
+        print("Order label", order_label)
 
         window = T // 2
         start_frames = np.zeros((feat_fin.shape[0], 2))
