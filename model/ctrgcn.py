@@ -1,5 +1,6 @@
 import math
 
+import torch
 import numpy as np
 from torch.autograd import Variable
 from model.modules import *
@@ -166,7 +167,8 @@ class Model(nn.Module):
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
-
+        self.sample_order(feat_fin)
+        
         # N*M,C,T*V
         c_new = x.size(1)
         x = x.view(N, M, c_new, -1)
@@ -179,3 +181,15 @@ class Model(nn.Module):
             return self.fc(x), order_pred
         else:
             return self.fc(x)
+        
+    def sample_order(self, feat_fin):
+        N, C, T, V = feat_fin.size()
+
+        print("Before:", feat_fin.shape)
+        feat_fin = feat_fin.view(-1, self.n_person, C, T, V)
+        print("After:", feat_fin.shape)
+        feat_fin = feat_fin.mean(1)
+        print("After mean:", feat_fin.shape)
+
+        order_label = torch.randint(high= 2, size = (N, ))
+
