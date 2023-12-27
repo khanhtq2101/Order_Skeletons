@@ -41,7 +41,7 @@ def get_parser():
 
     # feeder
     parser.add_argument('--feeder', default='feeder.feeder', help='data loader will be used')
-    parser.add_argument('--num-worker', type=int, default=32, help='the number of worker for data loader')
+    parser.add_argument('--num-worker', type=int, default=4, help='the number of worker for data loader')
     parser.add_argument('--train-feeder-args', action=DictAction, default=dict(),
                         help='the arguments of data loader for training')
     parser.add_argument('--test-feeder-args', action=DictAction, default=dict(),

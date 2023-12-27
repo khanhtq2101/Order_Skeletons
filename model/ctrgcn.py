@@ -134,7 +134,7 @@ class Model(nn.Module):
                   cl_high * self.multi_cl_weights[2] + cl_fin * self.multi_cl_weights[3]
         return logits, cl_loss
 
-    def forward(self, x, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
+    def forward(self, x, order_label, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
         if len(x.shape) == 3:
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
@@ -168,7 +168,7 @@ class Model(nn.Module):
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
 
-        self.sample_order(feat_fin, M)
+        self.sample_order(feat_fin, M, order_label)
 
         # N*M,C,T*V
         c_new = x.size(1)
@@ -183,7 +183,7 @@ class Model(nn.Module):
         else:
             return self.fc(x)
         
-    def sample_order(self, feat_fin, M):
+    def sample_order(self, feat_fin, M, order_label):
         N, C, T, V = feat_fin.size()
 
         print("Before:", feat_fin.shape)
@@ -191,6 +191,16 @@ class Model(nn.Module):
         print("After:", feat_fin.shape)
         feat_fin = feat_fin.mean(1)
         print("After mean:", feat_fin.shape)
+
+        window = T // 2
+
+        start_frame = np.random.choice(T - window, size = 2, replace = False)
+        offset = min(max((T - window) // 2, 1), window)
+        while (abs(start_frame[1] - start_frame[0]) < offset):
+            start_frame = np.random.choice(T - window, size = 2, replace = False)
+        
+        print("Length {} offset {} window {} start frame".format(T, offset, window, start_frame))
+
 
         order_label = torch.randint(high= 2, size = (N, ))
 

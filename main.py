@@ -319,7 +319,7 @@ class Processor:
 
             print("Data shape:", data.shape)
             # forward
-            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), label)
+            output, order_pred= self.model(calc_diff_modality(data, **self.train_modality), label, order_label)
 
             break 
 
