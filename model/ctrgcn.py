@@ -186,15 +186,16 @@ class Model(nn.Module):
     def sample_order(self, feat_fin, M, order_label):
         N, C, T, V = feat_fin.size()
 
-        print("Before:", feat_fin.shape)
+        #print("Before:", feat_fin.shape)
         feat_fin = feat_fin.view(-1, M, C, T, V)
 
-        print("After:", feat_fin.shape)
-        #mean person
-        feat_fin = feat_fin.mean(1)
-        print("After mean:", feat_fin.shape)
-        print("Order label shape:", order_label.shape)
-        print("Order label", order_label)
+        #print("After:", feat_fin.shape)
+        
+        feat_fin = feat_fin.mean(1) #mean person
+        
+        #print("After mean:", feat_fin.shape)
+        #print("Order label shape:", order_label.shape)
+        #print("Order label", order_label)
 
         window = T // 2
         start_frames = np.zeros((feat_fin.shape[0], 2))
@@ -209,10 +210,18 @@ class Model(nn.Module):
 
             if label.item():
                 start_frame = np.flip(start_frame)
-            print("Start frames:", i, start_frame, label.item())
+            #print("Start frames:", i, start_frame, label.item())
             start_frames[i, :] = start_frame
         
         print(start_frames)
+        clip1 = torch.tensor([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :] for i in range(feat_fin.shape[0])])
+        clip2 = torch.tensor([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :] for i in range(feat_fin.shape[0])])
+
+        print("Clip shape:", clip1.shape, clip2.shape)
+        clips = torch.cat((clip1, clip2))
+
+        print("Concatenate shape:", clips.shape)
+
             
             
 
