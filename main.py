@@ -292,10 +292,11 @@ class Processor:
         self.train_writer.add_scalar('epoch', epoch, self.global_step)
         self.record_time()
         timer = dict(dataloader=0.001, model=0.001, statistics=0.001)
-        process = tqdm(loader, ncols=40)
+        #process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        for batch_idx, (data, label, order_label, index) in enumerate(process):
+        #for batch_idx, (data, label, order_label, index) in enumerate(process):
+        for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             
             #for order on clip space
@@ -386,9 +387,10 @@ class Processor:
             label_list = []
             pred_list = []
             step = 0
-            process = tqdm(self.data_loader[ln], ncols=40)
+            #process = tqdm(self.data_loader[ln], ncols=40)
             
-            for batch_idx, (data, label, order_label, index) in enumerate(process):
+            #for batch_idx, (data, label, order_label, index) in enumerate(process):
+            for batch_idx, (data, label, order_label, index) in enumerate(self.data_loader[ln]):
                 label_list.append(label)
                 with torch.no_grad():
                     data = data.float().cuda(self.output_device)
