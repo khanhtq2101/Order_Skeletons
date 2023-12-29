@@ -239,10 +239,10 @@ class Order_Head(nn.Module):
 
         #how to calculate C= 256 with n_frame 32
         
-        self.order_U = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 16, 256, kernel_size=1),
+        self.order_U = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 8, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
-        self.order_V = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 16, 256, kernel_size=1),
+        self.order_V = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 8, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)

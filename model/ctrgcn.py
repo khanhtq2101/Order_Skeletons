@@ -197,7 +197,7 @@ class Model(nn.Module):
         #print("Order label shape:", order_label.shape)
         #print("Order label", order_label)
 
-        window = T // 16
+        window = T // 8
         start_frames = np.zeros((feat_fin.shape[0], 2), dtype = int)
         #print(start_frames.shape)
 
