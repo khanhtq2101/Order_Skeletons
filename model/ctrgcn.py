@@ -30,7 +30,9 @@ class Model(nn.Module):
         self.l10 = TCN_GCN_unit(self.base_channel * 4, self.base_channel * 4, A, adaptive=self.adaptive)
 
     def build_order_blocks(self):
-        self.order_head = Order_Head(self.base_channel * 4, self.num_frame // 4, self.num_point, self.num_person, n_class=self.num_class, version=self.cl_version, pred_threshold=self.pred_threshold, use_p_map=self.use_p_map)
+        self.order_head = Order_Head(self.base_channel * 4, self.num_frame // 4, self.num_point, self.num_person, 
+                                     n_class=self.num_class, version=self.cl_version, pred_threshold=self.pred_threshold, use_p_map=self.use_p_map,
+                                     window_feature = self.window_feature)
         
     def build_cl_blocks(self):
         if self.cl_mode == "ST-Multi-Level":
