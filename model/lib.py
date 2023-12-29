@@ -224,7 +224,8 @@ class ST_RenovateNet(nn.Module):
         return spatio_cl_loss + tempor_cl_loss
 
 class Order_Head(nn.Module):
-    def __init__(self, n_channel, n_frame, n_joint, n_person, h_channel=256, **kwargs):
+    def __init__(self, n_channel, n_frame, n_joint, n_person, h_channel=256, 
+                 window_feature= 8, **kwargs):
         super(Order_Head, self).__init__()
         self.n_channel = n_channel # = base_channel * 4 = 64 * 4
         self.n_frame = n_frame # = num_frame // 4 = 32 // 4= 8
@@ -239,10 +240,10 @@ class Order_Head(nn.Module):
 
         #how to calculate C= 256 with n_frame 32
         
-        self.order_U = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 4, 256, kernel_size=1),
+        self.order_U = nn.Sequential(nn.Conv2d(window_feature * h_channel // 16, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
-        self.order_V = nn.Sequential(nn.Conv2d(self.n_frame * (h_channel // n_frame) // 4, 256, kernel_size=1),
+        self.order_V = nn.Sequential(nn.Conv2d(window_feature * h_channel // 16, 256, kernel_size=1),
                                       nn.ReLU(True),
                                       nn.Conv2d(256, 128, kernel_size=1))
         self.order_fc = nn.Conv2d(256, 2, kernel_size = 1)

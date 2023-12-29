@@ -157,6 +157,7 @@ class Processor:
         print(Model)
         self.model = Model(**self.arg.model_args, cl_mode=self.arg.cl_mode,
                            order_mode=self.arg.order_mode,
+                           window_feature = self.arg.window_feature, 
                            multi_cl_weights=self.arg.w_multi_cl_loss, cl_version=self.arg.cl_version,
                            pred_threshold=self.arg.pred_threshold, use_p_map=self.arg.use_p_map)
         #print("Model keys:", self.model.state_dict().keys())

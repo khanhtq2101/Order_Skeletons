@@ -46,6 +46,7 @@ class Model(nn.Module):
                  num_class=60, num_point=25, num_frame=64, num_person=2, graph=None, graph_args=dict(), in_channels=3,
                  base_channel=64, drop_out=0, adaptive=True,
                  # Module Params
+                 window_feature = 8, 
                  cl_mode=None, order_mode = 0, multi_cl_weights=[1, 1, 1, 1], cl_version='V0', pred_threshold=0, use_p_map=True,
                  ):
         super(Model, self).__init__()
@@ -70,6 +71,8 @@ class Model(nn.Module):
         self.cl_version = cl_version
         self.pred_threshold = pred_threshold
         self.use_p_map = use_p_map
+
+        self.window_feature = window_feature
         
         self.data_bn = nn.BatchNorm1d(num_person * in_channels * num_point)
         self.build_basic_blocks()
@@ -197,7 +200,7 @@ class Model(nn.Module):
         #print("Order label shape:", order_label.shape)
         #print("Order label", order_label)
 
-        window = T // 4
+        window = self.window_feature
         start_frames = np.zeros((feat_fin.shape[0], 2), dtype = int)
         #print(start_frames.shape)
 

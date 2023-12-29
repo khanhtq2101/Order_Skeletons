@@ -70,6 +70,8 @@ def get_parser():
                         help='Training with order task')
     parser.add_argument('--order-weight', type = float, default=0.5,
                         help='Weight for order task')
+    parser.add_argument('--window-feature', type = int, default= 8,
+                        help='Sampling window on feature space')
     
     # optim
     parser.add_argument('--base-lr', type=float, default=1e-3, help='initial learning rate')
