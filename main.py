@@ -426,6 +426,7 @@ class Processor:
 
             print('Accuracy: ', accuracy, ' model: ', self.arg.model_saved_name)
             if self.arg.phase == 'train':
+                print("Write eval to tensor board.")
                 self.val_writer.add_scalar('loss', loss, epoch)
                 self.val_writer.add_scalar('acc', accuracy, epoch)
 
@@ -486,13 +487,13 @@ class Processor:
                     weights = OrderedDict([['module.' + k, v.cuda(self.output_device)] for k, v in weights.items()])
             self.model.load_state_dict(weights)
 
-            wf = weights_path.replace('.pt', '_wrong.txt')
-            rf = weights_path.replace('.pt', '_right.txt')
+            #wf = weights_path.replace('.pt', '_wrong.txt')
+            #rf = weights_path.replace('.pt', '_right.txt')
             self.arg.print_log = True
 
-            self.eval(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
+            #self.eval(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
 
-            wrong_analyze(wf, rf)
+            #wrong_analyze(wf, rf)
             self.arg.print_log = True
 
             num_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
