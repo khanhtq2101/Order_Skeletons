@@ -327,9 +327,11 @@ class Processor:
             loss_order = self.loss(order_pred, order_label)
             
             if self.arg.order_mode:
-              full_loss = loss_action + self.arg.order_weight*loss_order
+                full_loss = loss_action + self.arg.order_weight*loss_order
+            elif self.arg.order_only:
+                full_loss = loss_order
             else: 
-              full_loss = loss_action
+                full_loss = loss_action
 
             # backward
             self.optimizer.zero_grad()
