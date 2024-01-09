@@ -78,6 +78,7 @@ class Model(nn.Module):
         
         if self.training:
             self.build_order_blocks()
+            print("# params order: ", sum(p.numel() for p in self.order_head.parameters() if p.requires_grad))
 
         self.fc = nn.Linear(self.base_channel * 4, self.num_class)
         nn.init.normal_(self.fc.weight, 0, math.sqrt(2. / num_class))
