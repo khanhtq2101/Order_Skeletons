@@ -73,8 +73,8 @@ class Model(nn.Module):
         self.data_bn = nn.BatchNorm1d(num_person * in_channels * num_point)
         self.build_basic_blocks()
 
-        if self.cl_mode is not None:
-            self.build_cl_blocks()
+        #if self.cl_mode is not None:
+         #   self.build_cl_blocks()
         
         if self.training:
             self.build_order_blocks()
