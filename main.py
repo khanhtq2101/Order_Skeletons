@@ -39,8 +39,8 @@ def init_seed(seed, random_seed):
     # Random seed fixed
     if random_seed:
         print("Random seed initialization.")
-        torch.cuda.manual_seed_all()
-        torch.manual_seed()
+        torch.cuda.seed_all()
+        torch.seed()
         np.random.seed()
         random.seed()
         # torch.backends.cudnn.enabled = False
