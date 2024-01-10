@@ -303,7 +303,6 @@ class Processor:
         #process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        '''
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -358,7 +357,7 @@ class Processor:
             self.train_writer.add_scalar('lr', self.lr, self.global_step)
             timer['statistics'] += self.split_time()
         
-        '''
+        
         self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
         self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
         self.train_writer.add_scalar('loss_order', np.mean(loss_order_value), epoch)
@@ -555,17 +554,15 @@ class Processor:
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
                 self.train(epoch, save_model=save_model)
-                #self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
-                self.best_acc_epoch = 1
+                self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             #test final epoch
-            self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
+            self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
 
             # test the best model
             self.arg.phase == 'test'
-            
             weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]     
             weights = torch.load(weights_path)
             if type(self.arg.device) is list:
