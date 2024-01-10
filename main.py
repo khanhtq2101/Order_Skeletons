@@ -553,7 +553,7 @@ class Processor:
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
-                self.train(epoch, save_model=save_model)
+                #self.train(epoch, save_model=save_model)
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             
@@ -572,8 +572,10 @@ class Processor:
             wf = weights_path.replace('.pt', '_wrong.txt')
             rf = weights_path.replace('.pt', '_right.txt')
             self.arg.print_log = True
-
-            self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'], wrong_file=wf, result_file=rf)
+            
+            self.arg.weights = glob.glob(os.path.joint(self.arg.work_dir, 'runs-model-{}*'.format(self.best_acc_epoch)))
+            self.load_model()
+            self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'])
 
             wrong_analyze(wf, rf)
             self.arg.print_log = True
