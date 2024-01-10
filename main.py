@@ -575,7 +575,7 @@ class Processor:
             self.arg.print_log = True
             
             self.arg.weights = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-{}*'.format(self.best_acc_epoch)))[0]
-            self.load_model()
+            #self.load_model()
             self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'])
 
             wrong_analyze(wf, rf)
