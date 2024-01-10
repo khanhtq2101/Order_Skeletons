@@ -559,6 +559,7 @@ class Processor:
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             #test final epoch
+            self.arg.print_log = True
             self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
 
             # test the best model
@@ -572,11 +573,10 @@ class Processor:
 
             wf = weights_path.replace('.pt', '_wrong.txt')
             rf = weights_path.replace('.pt', '_right.txt')
-            self.arg.print_log = True
             
             self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
 
-            wrong_analyze(wf, rf)
+            #wrong_analyze(wf, rf)
             self.arg.print_log = True
 
             num_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
