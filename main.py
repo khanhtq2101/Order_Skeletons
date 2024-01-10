@@ -35,24 +35,14 @@ rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)  # 能打开的最大文件�
 resource.setrlimit(resource.RLIMIT_NOFILE, (2048, rlimit[1]))
 
 
-def init_seed(seed, random_seed):
+def init_seed(seed):
     # Random seed fixed
-    if random_seed:
-        print("Random seed initialization.")
-        torch.cuda.seed_all()
-        torch.seed()
-        np.random.seed()
-        random.seed()
-        # torch.backends.cudnn.enabled = False
-        torch.backends.cudnn.deterministic = False
-    else:
-        print("Initializing seed in arg.")
-        torch.cuda.manual_seed_all(seed)
-        torch.manual_seed(seed)
-        np.random.seed(seed)
-        random.seed(seed)
-        # torch.backends.cudnn.enabled = False
-        torch.backends.cudnn.deterministic = True
+    torch.cuda.manual_seed_all(seed)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    # torch.backends.cudnn.enabled = False
+    torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
 
@@ -632,7 +622,7 @@ if __name__ == '__main__':
         parser.set_defaults(**default_arg)
 
     arg = parser.parse_args()
-    init_seed(arg.seed, arg.random_seed)
+    init_seed(arg.seed)
     processor = Processor(arg)
     try:
         processor.start()

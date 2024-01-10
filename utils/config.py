@@ -32,7 +32,7 @@ def get_parser():
 
     # visualize, debug & record
     parser.add_argument('--seed', type=int, default=1, help='random seed for pytorch')
-    parser.add_argument('--random-seed', type=int, default=1, help='1 if using random seed')
+    parser.add_argument('--random-seed', type=int, default=0, help='1 if using random seed')
     parser.add_argument('--log-interval', type=int, default=100, help='the interval for printing messages (#iteration)')
     parser.add_argument('--save-interval', type=int, default=1, help='the interval for storing models (#iteration)')
     parser.add_argument('--save-epoch', type=int, default=30, help='the start epoch to save model (#iteration)')
