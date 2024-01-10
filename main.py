@@ -303,6 +303,7 @@ class Processor:
         #process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
+        '''
         for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             B, C, T, V, M= data.shape
@@ -357,7 +358,7 @@ class Processor:
             self.train_writer.add_scalar('lr', self.lr, self.global_step)
             timer['statistics'] += self.split_time()
         
-        
+        '''
         self.train_writer.add_scalar('acc', np.mean(acc_value), epoch)
         self.train_writer.add_scalar('loss_action', np.mean(loss_value), epoch)
         self.train_writer.add_scalar('loss_order', np.mean(loss_order_value), epoch)
@@ -553,7 +554,7 @@ class Processor:
             for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                 save_model = (((epoch + 1) % self.arg.save_interval == 0) or (
                         epoch + 1 == self.arg.num_epoch)) and (epoch + 1) > self.arg.save_epoch
-                #self.train(epoch, save_model=save_model)
+                self.train(epoch, save_model=save_model)
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
             
             
@@ -573,7 +574,7 @@ class Processor:
             rf = weights_path.replace('.pt', '_right.txt')
             self.arg.print_log = True
             
-            self.arg.weights = glob.glob(os.path.joint(self.arg.work_dir, 'runs-model-{}*'.format(self.best_acc_epoch)))
+            self.arg.weights = glob.glob(os.path.joint(self.arg.work_dir, 'runs-model-{}*'.format(self.best_acc_epoch)))[0]
             self.load_model()
             self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test'])
 
