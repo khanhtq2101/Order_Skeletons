@@ -560,6 +560,9 @@ class Processor:
             
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
+            #test final epoch
+            self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
+
             # test the best model
             self.arg.phase == 'test'
             
@@ -574,9 +577,7 @@ class Processor:
             rf = weights_path.replace('.pt', '_right.txt')
             self.arg.print_log = True
             
-            #self.arg.weights = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-{}*'.format(self.best_acc_epoch)))[0]
-            #self.load_model()
-            self.test(epoch=self.best_acc_epoch, save_score=True, loader_name=['test_final'])
+            self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
 
             wrong_analyze(wf, rf)
             self.arg.print_log = True
