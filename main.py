@@ -559,22 +559,23 @@ class Processor:
             self.print_log(f'Epoch number: {self.best_acc_epoch}')
 
             #test final epoch
-            self.arg.print_log = True
-            self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
+            if epoch > 40:
+                self.arg.print_log = True
+                self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
 
-            # test the best model
-            self.arg.phase == 'test'
-            weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]     
-            weights = torch.load(weights_path)
-            if type(self.arg.device) is list:
-                if len(self.arg.device) > 1:
-                    weights = OrderedDict([['module.' + k, v.cuda(self.output_device)] for k, v in weights.items()])
-            self.model.load_state_dict(weights)
+                # test the best model
+                self.arg.phase == 'test'
+                weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-model-' + str(self.best_acc_epoch) + '*'))[0]     
+                weights = torch.load(weights_path)
+                if type(self.arg.device) is list:
+                    if len(self.arg.device) > 1:
+                        weights = OrderedDict([['module.' + k, v.cuda(self.output_device)] for k, v in weights.items()])
+                self.model.load_state_dict(weights)
 
-            wf = weights_path.replace('.pt', '_wrong.txt')
-            rf = weights_path.replace('.pt', '_right.txt')
-            
-            self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
+                wf = weights_path.replace('.pt', '_wrong.txt')
+                rf = weights_path.replace('.pt', '_right.txt')
+                
+                self.test(epoch=self.best_acc_epoch - 1, save_score=True, loader_name=['test_final'])
 
             #wrong_analyze(wf, rf)
             self.arg.print_log = True
