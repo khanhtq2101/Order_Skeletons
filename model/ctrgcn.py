@@ -182,10 +182,12 @@ class Model(nn.Module):
         if order_label is not None:
             order_clip =  self.order_clip_sampling(x, M, order_label)
             order_feat = self.forward_backbone(order_clip)
+            print("Order clip shape", order_clip.shape)
+            print("Order feature shape:", order_feat.shape)
+
             order_pred = self.order_head(order_feat)
     
-        print("Order clip shape", order_clip.shape)
-        print("Order feature shape:", order_feat.shape)
+        
 
         x = self.forward_backbone(x)
         feat_fin = x.clone() # N*M, 4C, T/4, V
