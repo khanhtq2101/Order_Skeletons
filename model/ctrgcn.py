@@ -187,7 +187,6 @@ class Model(nn.Module):
 
             order_pred = self.order_head(order_feat)
     
-        
 
         x = self.forward_backbone(x)
         feat_fin = x.clone() # N*M, 4C, T/4, V
