@@ -203,6 +203,9 @@ class Model(nn.Module):
         x = x.mean(3).mean(1) # 1: mean on person,3: mean temporal and spatial (vertices)
         
         x = self.drop_out(x)
+
+
+        print(x.shape)
         
         if order_label is not None:
             return self.fc(x), order_pred
