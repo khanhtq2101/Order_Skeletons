@@ -181,7 +181,7 @@ class Model(nn.Module):
 
         if order_label is not None:
             order_clip =  self.order_clip_sampling(x, M, order_label)
-            #order_feat = self.forward_backbone(order_clip)
+            order_feat = self.forward_backbone(order_clip)
 
         print("Order clip shape", order_clip.shape)
 
@@ -210,7 +210,7 @@ class Model(nn.Module):
 
         #print("After:", feat_fin.shape)
         
-        feat_fin = feat_fin.mean(1) #mean person
+        #feat_fin = feat_fin.mean(1) #mean person
         
         #print("After mean:", feat_fin.shape)
         #print("Order label shape:", order_label.shape)
@@ -234,8 +234,8 @@ class Model(nn.Module):
         
         #print(start_frames)
         #print(feat_fin[i, :, start_frames[0, 0] : start_frames[0, 0] + window, :].shape)
-        clip1 = torch.stack([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :] for i in range(feat_fin.shape[0])])
-        clip2 = torch.stack([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :] for i in range(feat_fin.shape[0])])
+        clip1 = torch.stack([feat_fin[i, :, start_frames[i, 0] : start_frames[i, 0] + window, :, :] for i in range(feat_fin.shape[0])])
+        clip2 = torch.stack([feat_fin[i, :, start_frames[i, 1] : start_frames[i, 1] + window, :, :] for i in range(feat_fin.shape[0])])
 
         #print("Clip shape:", clip1.shape, clip2.shape)
         clips_feat_fin = torch.cat((clip1, clip2))
