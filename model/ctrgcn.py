@@ -138,8 +138,8 @@ class Model(nn.Module):
         cl_loss = cl_low * self.multi_cl_weights[0] + cl_mid * self.multi_cl_weights[1] + \
                   cl_high * self.multi_cl_weights[2] + cl_fin * self.multi_cl_weights[3]
         return logits, cl_loss
-
-    def forward(self, x, order_label= None, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
+    
+    def forward_backbone(self, x):
         if len(x.shape) == 3:
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
@@ -170,14 +170,19 @@ class Model(nn.Module):
 
         x = self.l9(x)
         x = self.l10(x)
+
+        return x
+
+    def forward(self, x, order_label= None, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
+        x = self.forward_backbone(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
         
         print("Final feature shape on model:", feat_fin.shape)
     
         # N*M,C,T*V
-        c_new = x.size(1)
+        c_new = x.size(1) #channel dimension
         x = x.view(N, M, c_new, -1)
-        x = x.mean(3).mean(1) # mean on person 
+        x = x.mean(3).mean(1) # 1: mean on person,3: mean temporal and spatial (vertices)
         
         x = self.drop_out(x)
         
