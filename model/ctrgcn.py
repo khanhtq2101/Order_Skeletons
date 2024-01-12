@@ -174,6 +174,11 @@ class Model(nn.Module):
         return x
 
     def forward(self, x, order_label= None, label=None, get_cl_loss=False, get_hidden_feat=False, **kwargs):
+        if len(x.shape) == 3:
+            N, T, VC = x.shape
+            x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
+        N, C, T, V, M = x.size()
+        
         x = self.forward_backbone(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
         
