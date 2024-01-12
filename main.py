@@ -506,9 +506,7 @@ class Processor:
             if 'ucla' in self.arg.feeder:
                 self.data_loader[ln].dataset.sample_name = np.arange(len(score))
             accuracy = self.data_loader[ln].dataset.top_k(score, 1)
-            if accuracy > self.best_acc:
-                self.best_acc = accuracy
-                self.best_acc_epoch = epoch + 1
+            
 
             print('Accuracy: ', accuracy, ' model: ', self.arg.model_saved_name)
 
@@ -561,7 +559,7 @@ class Processor:
             #test final epoch
             if epoch > 40:
                 self.arg.print_log = True
-                self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
+                #self.test(epoch= epoch, save_score=True, loader_name=['test_final'])
 
                 # test the best model
                 self.arg.phase == 'test'
