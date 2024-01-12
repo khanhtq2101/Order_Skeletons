@@ -271,6 +271,7 @@ class Order_Head(nn.Module):
         #print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
         
         clip1 = tempor_feat[:N//2, :, None, None] 
+        print("Clip1", clip1.shape)
         clip1 = self.order_U(clip1)
         clip2 = tempor_feat[N//2:, :, None, None]
         clip2 = self.order_V(clip2)
