@@ -183,7 +183,7 @@ class Model(nn.Module):
             #order_clip =  self.order_clip_sampling(x, M, order_label)
             #order_feat = self.forward_backbone(order_clip)
 
-        print("Order clip shape", order_clip.shape)
+        #print("Order clip shape", order_clip.shape)
 
         x = self.forward_backbone(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
