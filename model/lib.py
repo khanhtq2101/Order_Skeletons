@@ -253,7 +253,7 @@ class Order_Head(nn.Module):
     def forward(self, clips_feat_fin, **kwargs):
         # clips_feat_fin: 2N, 4C, T/8, V
         N, C, T, V = clips_feat_fin.shape
-        clips_feat_fin = clips_feat_fin.view(-1, M, C, T, V)           
+        clips_feat_fin = clips_feat_fin.view(-1, self.n_person, C, T, V)           
         clips_feat_fin = clips_feat_fin.mean(1) #mean person
 
         tempor_feat = clips_feat_fin.mean(-1, keepdim=True) #spatial (joint) pooling 
