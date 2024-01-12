@@ -257,6 +257,7 @@ class Order_Head(nn.Module):
         clips_feat_fin = clips_feat_fin.mean(1) #mean person
         print(clips_feat_fin.shape, "shape")
 
+        N, C, T, V = clips_feat_fin.shape
         tempor_feat = clips_feat_fin.mean(-1, keepdim=True) #spatial (joint) pooling 
         #print("After person and spatial mean:", tempor_feat.shape) 
         # 2N, 4C, T/8, 1
