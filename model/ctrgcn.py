@@ -171,7 +171,8 @@ class Model(nn.Module):
         x = self.l9(x)
         x = self.l10(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
-
+        
+        print("Final feature shape on model:", feat_fin.shape)
     
         # N*M,C,T*V
         c_new = x.size(1)

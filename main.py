@@ -318,6 +318,7 @@ class Processor:
             # forward
             output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), order_label)            
 
+            print("Batch {} output shape:".format(batch_idx), output.shape)
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
             #print("Oder label:", order_label.shape)
@@ -327,6 +328,7 @@ class Processor:
             #print("data type:", order_label.dtype, order_pred.dtype)
             #print("data type:", output.dtype, label.dtype)
 
+            '''
             loss_action = self.loss(output, label)
             loss_order = self.loss(order_pred, order_label)
             
@@ -379,7 +381,7 @@ class Processor:
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
             torch.save(self.optimizer.state_dict(),
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-        
+        '''
 
     def eval(self, epoch, save_score=False, loader_name=['test'], wrong_file=None, result_file=None):
         if wrong_file is not None:
