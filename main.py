@@ -301,10 +301,14 @@ class Processor:
             self.global_step += 1
             
             #for order on clip space
-            #B, C, T, V, M= data.shape
+            B, C, T, V, M= data.shape
             #data = data.view(2*B, int(C/2), T, V, M)
             #label = torch.flatten(label)
-            
+            if batch_idx == 1:
+                data = data.view(2*B, C, int(T/2), V, M)
+
+            print("Batch {} data shape:".format(batch_idx), data.shape)
+
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
                 label = label.long().cuda(self.output_device)
