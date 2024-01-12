@@ -180,9 +180,9 @@ class Model(nn.Module):
         N, C, T, V, M = x.size()
 
         if order_label is not None:
-            order_clip =  self.sampling(x, M, order_label)
+            order_clip =  self.order_clip_sampling(x, M, order_label)
             order_feat = self.forward_backbone(order_clip)
-            
+
         print("Order clip shape", order_clip.shape)
 
         x = self.forward_backbone(x)
@@ -198,15 +198,13 @@ class Model(nn.Module):
         x = self.drop_out(x)
         
         if order_label is not None:
-            #sampling on feature space
-            clips_feat_fin = self.sampling(feat_fin, M, order_label) # 2N, 4C, T/8, V
             order_pred = self.order_head(clips_feat_fin)
             return self.fc(x), order_pred
         else:
             return self.fc(x)
         
-    def sampling(self, feat_fin, M, order_label):
-        N, C, T, V = feat_fin.size()
+    def order_clip_sampling(self, feat_fin, M, order_label):
+        N, C, T, V, M = feat_fin.size()
 
         #print("Before:", feat_fin.shape)
         feat_fin = feat_fin.view(-1, M, C, T, V)
