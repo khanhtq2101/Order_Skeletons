@@ -186,6 +186,8 @@ class Model(nn.Module):
             N, C, T, V = order_feat.size()
             order_feat = order_feat.view(-1, M, C, T, V)           
             order_feat = order_feat.mean(1) #mean person
+
+            order_pred = self.order_head(order_feat)
     
         print("Order clip shape", order_clip.shape)
         print("Order feature shape:", order_feat.shape)
