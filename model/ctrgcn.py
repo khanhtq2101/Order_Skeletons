@@ -206,7 +206,7 @@ class Model(nn.Module):
         N, C, T, V, M = feat_fin.size()
 
         #print("Before:", feat_fin.shape)
-        feat_fin = feat_fin.view(-1, M, C, T, V)
+        #feat_fin = feat_fin.view(-1, M, C, T, V)
 
         #print("After:", feat_fin.shape)
         
