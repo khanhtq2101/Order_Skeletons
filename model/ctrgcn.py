@@ -179,8 +179,8 @@ class Model(nn.Module):
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
         N, C, T, V, M = x.size()
 
-        #if order_label is not None:
-            #order_clip =  self.order_clip_sampling(x, M, order_label)
+        if order_label is not None:
+            order_clip =  self.order_clip_sampling(x, M, order_label)
             #order_feat = self.forward_backbone(order_clip)
 
         #print("Order clip shape", order_clip.shape)
@@ -198,7 +198,6 @@ class Model(nn.Module):
         x = self.drop_out(x)
         
         if order_label is not None:
-            order_pred = self.order_head(clips_feat_fin)
             return self.fc(x), order_pred
         else:
             return self.fc(x)
