@@ -274,7 +274,6 @@ class Order_Head(nn.Module):
         clip2 = tempor_feat[N//2:, :, None, None]
         clip2 = self.order_V(clip2)
 
-        print(clip1.shape, clip2.shape)
 
         tempor_feat = torch.cat((clip1, clip2), dim= 1)
         order_pred = self.order_fc(tempor_feat)

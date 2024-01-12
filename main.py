@@ -305,7 +305,7 @@ class Processor:
             #data = data.view(2*B, int(C/2), T, V, M)
             #label = torch.flatten(label)           
 
-            print("Batch {} data shape:".format(batch_idx), data.shape)
+            #print("Batch {} data shape:".format(batch_idx), data.shape)
 
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
@@ -316,7 +316,7 @@ class Processor:
             # forward
             output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), order_label)            
 
-            print("Batch {} output shape:".format(batch_idx), output.shape, order_pred.shape)
+            #print("Batch {} output shape:".format(batch_idx), output.shape, order_pred.shape)
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
             #print("Oder label:", order_label.shape)
