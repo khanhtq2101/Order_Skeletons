@@ -316,7 +316,7 @@ class Processor:
             # forward
             output, order_pred = self.model(calc_diff_modality(data, **self.train_modality), order_label)            
 
-            print("Batch {} output shape:".format(batch_idx), output.shape)
+            print("Batch {} output shape:".format(batch_idx), output.shape, order_pred.shape)
             #print("Action label:", label.shape)
             #print("Action Output:", output.shape)
             #print("Oder label:", order_label.shape)
