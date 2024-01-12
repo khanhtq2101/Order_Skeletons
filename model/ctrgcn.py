@@ -178,7 +178,11 @@ class Model(nn.Module):
             N, T, VC = x.shape
             x = x.view(N, T, self.num_point, -1).permute(0, 3, 1, 2).contiguous().unsqueeze(-1)
         N, C, T, V, M = x.size()
-        
+
+        if order_label is not None:
+            order_clip =  self.sampling(x, M, order_label)
+        print("Order clip shape", order_clip.shape)
+
         x = self.forward_backbone(x)
         feat_fin = x.clone() # 2N*M, 4C, T/4, V
         
