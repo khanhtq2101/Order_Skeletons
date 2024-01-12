@@ -182,11 +182,6 @@ class Model(nn.Module):
         if order_label is not None:
             order_clip =  self.order_clip_sampling(x, M, order_label)
             order_feat = self.forward_backbone(order_clip)
-
-            N, C, T, V = order_feat.size()
-            order_feat = order_feat.view(-1, M, C, T, V)           
-            order_feat = order_feat.mean(1) #mean person
-
             order_pred = self.order_head(order_feat)
     
         print("Order clip shape", order_clip.shape)
