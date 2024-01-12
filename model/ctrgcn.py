@@ -182,16 +182,15 @@ class Model(nn.Module):
         if order_label is not None:
             order_clip =  self.order_clip_sampling(x, M, order_label)
             order_feat = self.forward_backbone(order_clip)
-            print("Order clip shape", order_clip.shape)
-            print("Order feature shape:", order_feat.shape)
+            #print("Order clip shape", order_clip.shape)
+            #print("Order feature shape:", order_feat.shape)
 
-            order_pred = self.order_head(order_feat)
-    
+            order_pred = self.order_head(order_feat)    
 
         x = self.forward_backbone(x)
         feat_fin = x.clone() # N*M, 4C, T/4, V
         
-        print("Final feature shape on model:", feat_fin.shape)
+        #print("Final feature shape on model:", feat_fin.shape)
     
         # N*M,C,T*V
         c_new = x.size(1) #channel dimension
@@ -199,9 +198,6 @@ class Model(nn.Module):
         x = x.mean(3).mean(1) # 1: mean on person,3: mean temporal and spatial (vertices)
         
         x = self.drop_out(x)
-
-
-        print(x.shape)
         
         if order_label is not None:
             return self.fc(x), order_pred

@@ -255,7 +255,6 @@ class Order_Head(nn.Module):
         N, C, T, V = clips_feat_fin.shape
         clips_feat_fin = clips_feat_fin.view(-1, self.n_person, C, T, V)           
         clips_feat_fin = clips_feat_fin.mean(1) #mean person
-        print(clips_feat_fin.shape, "shape")
 
         N, C, T, V = clips_feat_fin.shape
         tempor_feat = clips_feat_fin.mean(-1, keepdim=True) #spatial (joint) pooling 
@@ -267,12 +266,10 @@ class Order_Head(nn.Module):
         # [2N, C, T, 1] = [128, 32, 8, 1]
 
         tempor_feat = tempor_feat.flatten(1) #  flatten from dim 1 to end, to [2N, C] = [128, 8*32= 256]
-        print("After flatten:", tempor_feat.shape) # [128, 256]
         
         #print("before seperate U, V:", tempor_feat.shape) # [64, 2, 256]
         
         clip1 = tempor_feat[:N//2, :, None, None] 
-        print("Clip1", clip1.shape)
         clip1 = self.order_U(clip1)
         clip2 = tempor_feat[N//2:, :, None, None]
         clip2 = self.order_V(clip2)

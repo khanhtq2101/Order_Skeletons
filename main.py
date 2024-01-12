@@ -293,11 +293,11 @@ class Processor:
         self.train_writer.add_scalar('epoch', epoch, self.global_step)
         self.record_time()
         timer = dict(dataloader=0.001, model=0.001, statistics=0.001)
-        #process = tqdm(loader, ncols=40)
+        process = tqdm(loader, ncols=40)
         roll_back_step = self.global_step
 
-        #for batch_idx, (data, label, order_label, index) in enumerate(process):
-        for batch_idx, (data, label, order_label, index) in enumerate(loader):
+        for batch_idx, (data, label, order_label, index) in enumerate(process):
+        #for batch_idx, (data, label, order_label, index) in enumerate(loader):
             self.global_step += 1
             
             #for order on clip space
@@ -326,7 +326,7 @@ class Processor:
             #print("data type:", order_label.dtype, order_pred.dtype)
             #print("data type:", output.dtype, label.dtype)
 
-            '''
+            
             loss_action = self.loss(output, label)
             loss_order = self.loss(order_pred, order_label)
             
@@ -379,7 +379,7 @@ class Processor:
                        self.arg.model_saved_name + '-model-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
             torch.save(self.optimizer.state_dict(),
                        self.arg.model_saved_name + '-optim-' + str(epoch + 1) + '-' + str(int(self.global_step)) + '.pt')
-        '''
+        
 
     def eval(self, epoch, save_score=False, loader_name=['test'], wrong_file=None, result_file=None):
         if wrong_file is not None:
